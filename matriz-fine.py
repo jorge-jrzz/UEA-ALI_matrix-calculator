@@ -20,7 +20,22 @@ def main(page: ft.Page):
     colums = 0
     for i in range(1, 26):
         colums += 1
-        coo = ft.TextField(label=f"{rows}, {colums}")
+        coo = ft.TextField(  # label=f"({rows}, {colums})",
+            # label_style=ft.TextStyle(size=10),
+            border=ft.InputBorder.NONE,
+            max_length=3,
+            counter_style=ft.TextStyle(size=0),
+            text_size=12,
+            text_align=ft.TextAlign.CENTER,
+            hint_text=f"({rows}, {colums})",
+            hint_style=ft.TextStyle(
+                size=10,
+                color=ft.colors.GREY),
+            filled=True,
+            width=55,
+            height=50,
+            bgcolor=ft.colors.WHITE,
+        )
         coos.append(coo)
         if colums == 5:
             rows += 1
@@ -32,12 +47,11 @@ def main(page: ft.Page):
             items.append(
                 ft.Container(
                     content=coos[i-1],
-                    # content=ft.TextField(label=f"{rows}, {colums}"),
                     alignment=ft.alignment.center,
                     width=55,
                     height=50,
-                    bgcolor=ft.colors.GREY,
-                    border_radius=ft.border_radius.all(5)
+                    bgcolor=ft.colors.WHITE,
+                    border_radius=ft.border_radius.all(5),
                 )
             )
 
@@ -54,6 +68,23 @@ def main(page: ft.Page):
 
     b = ft.ElevatedButton(text="Submit", on_click=button_clicked)
 
+    resultado = """
+    1  2  3  4  5
+    6  7  8  9  10
+    11 12 13 14 15
+    16 17 18 19 20
+    21 22 23 24 25"""
+
+    page.window_center()
+    page.title = "Matrix Calculator"
+    page.window_height = 600
+    page.window_width = 1060
+
+    def page_resize(e):
+        print("New page size:", page.window_width, page.window_height)
+
+    page.on_resize = page_resize
+
     page.add(
         ft.Column(
             [
@@ -62,16 +93,30 @@ def main(page: ft.Page):
                 )
             ]
         ),
-        ft.Container(content=row, bgcolor=ft.colors.WHITE24),
-        # row,
+        ft.Row(
+            [
+                ft.Container(content=row, bgcolor=ft.colors.WHITE24),
+                ft.Text(" + "),
+                ft.Container(content=row, bgcolor=ft.colors.WHITE24),
+                ft.Text(" = "),
+                ft.Container(
+                    content=ft.Text(
+                        resultado,
+                        color=ft.colors.WHITE
+                    ),
+                    bgcolor="#FFDEA5",
+                    width=300,
+                    height=300,
+                    border_radius=ft.border_radius.all(5),
+                    alignment=ft.alignment.center,
+                ),
+
+            ]
+        ),
         b, t
+
     )
-
-    # values = []
-    # for i in coos:
-    #     values.append(i.value)
-
-    # print(values)
 
 
 ft.app(target=main)
+# ft.app(target=main, view=ft.AppView.WEB_BROWSER)
