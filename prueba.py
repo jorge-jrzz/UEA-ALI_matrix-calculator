@@ -1,76 +1,62 @@
-import flet as ft
-
-HEIGHT = 400
-
-
-def main(page: ft.Page):
-    def items(count):
-        items = []
-
-        items.append(ft.Container(ft.TextField(label="1"),
-                                  alignment=ft.alignment.center,  # La posicion de los valores dentro de sus cuadros
-                                  width=50,    # El ancho de los cuadros
-                                  height=50,  # El alto de los cuadros
-                                  # Las cuarvaturas de las esquinas de los cuadros
-                                  border_radius=ft.border_radius.all(5)))
-
-        items.append(ft.Container(ft.TextField(label="2"),
-                                  alignment=ft.alignment.center,  # La posicion de los valores dentro de sus cuadros
-                                  width=50,    # El ancho de los cuadros
-                                  height=50,  # El alto de los cuadros
-                                  # Las cuarvaturas de las esquinas de los cuadros
-                                  border_radius=ft.border_radius.all(5)))
-
-        items.append(ft.Container(ft.TextField(label="3"),
-                                  alignment=ft.alignment.center,  # La posicion de los valores dentro de sus cuadros
-                                  width=50,    # El ancho de los cuadros
-                                  height=50,  # El alto de los cuadros
-                                  # Las cuarvaturas de las esquinas de los cuadros
-                                  border_radius=ft.border_radius.all(5)))
-
-        items.append(ft.TextField(label="4"))
-        items.append(ft.TextField(label="5"))
-        items.append(ft.TextField(label="6"))
-        items.append(ft.TextField(label="7"))
-        items.append(ft.TextField(label="8"))
-        items.append(ft.TextField(label="9"))
-        items.append(ft.TextField(label="10"))
-        items.append(ft.TextField(label="11"))
-        items.append(ft.TextField(label="12"))
-        items.append(ft.TextField(label="13"))
-        items.append(ft.TextField(label="14"))
-        items.append(ft.TextField(label="15"))
-        items.append(ft.TextField(label="16"))
-        items.append(ft.TextField(label="17"))
-        items.append(ft.TextField(label="18"))
-        items.append(ft.TextField(label="19"))
-        items.append(ft.TextField(label="20"))
-        items.append(ft.TextField(label="21"))
-        items.append(ft.TextField(label="22"))
-        items.append(ft.TextField(label="23"))
-        items.append(ft.TextField(label="24"))
-        items.append(ft.TextField(label="25"))
-
-        return items
-
-    col = ft.Column(
-        wrap=True,
-        spacing=10,  # EL espacio entre los cuadros
-        run_spacing=10,
-        controls=items(25),  # Cantidad de items (25 -> matriz de 5x5)
-        height=220,
-    )
-
-    page.add(
-        ft.Column(
-            [
-                ft.Text(
-                    "Change the column height to see how child items wrap onto multiple columns:"
-                )
-            ]
-        ),
-        ft.Container(content=col, bgcolor=ft.colors.BLACK12),
-    )
+import numpy as np
+import sympy as sp
+from fractions import Fraction
 
 
-ft.app(target=main)
+def imprimir_matriz(mensaje1, matriz) -> None:
+    """
+    Imprime una matriz con un mensaje dado.
+
+    Args:
+        mensaje1 (str): El mensaje a imprimir antes de la matriz.
+        matriz (list): La matriz a imprimir.
+    """
+
+    mensaje = mensaje1 + "\n"+"\t"
+    for row in matriz:
+        for element in row:
+            frac = Fraction(str(element)).limit_denominator()
+            mensaje += str(frac) + "\t"
+        mensaje += "\n"+"\t"
+    print(mensaje)
+
+
+def calcular_inversa(matriz):
+    m = sp.Matrix(matriz)
+    if m.det() != 0:
+        return np.linalg.inv(np.array(matriz))
+    else:
+        return "** La matriz es singular **"
+
+
+# Inicializar las matrices
+matriz1 = [[1, 2, 3], [4, 5, 6], [7, 2, 9]]
+matriz2 = [[9, 8, 7], [6, 5, 4], [3, 2, 1]]
+
+filas = len(matriz1)
+columnas = len(matriz1[0])
+
+# Crea la matriz
+suma = np.empty([filas, columnas])
+multi = np.empty([filas, columnas])
+multi_es = np.empty([filas, columnas])
+
+suma = np.array(matriz1) + np.array(matriz2)
+resta = np.array(matriz1) - np.array(matriz2)
+multi_es = np.dot(matriz1, 2)   # Multiplicacion por un escalar
+multi = np.dot(matriz1, matriz2)
+inversa = calcular_inversa(matriz1)
+
+# Imprimir los resultados
+print("Resultados")
+imprimir_matriz("Matriz 1:", matriz1)
+imprimir_matriz("Matriz 2:", matriz2)
+imprimir_matriz("Suma 1- 2:", suma)
+imprimir_matriz("Resta 1 - 2: ", resta)
+imprimir_matriz("Multiplicación por un escalar matriz 1 x (2):", multi_es)
+imprimir_matriz("Multiplicación 1 x 2:", multi)
+
+try:
+    imprimir_matriz("Inversa de la Matriz 1:", inversa)
+except Exception as e:
+    print(inversa)
