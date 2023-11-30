@@ -26,21 +26,28 @@ import flet as ft
 
 def main(page: ft.Page):
 
-    def button_clicked(e):  # Funcion para recolectar la informacion de los inputs
-        t.value = f"Textboxe value of (1, 1) are: {coos[0].value}."
-        page.update()
+    page.window_center()
+    page.title = "Matrix Calculator"
+    page.window_height = 600
+    page.window_width = 1060
+    page.vertical_alignment = "center"
+    page.horizontal_alignment = "center"
 
-        values = []
-        for i in coos:
-            values.append(i.value)
+    #  def button_clicked(e):  # Funcion para recolectar la informacion de los inputs
+    #     t.value = f"Textboxe value of (1, 1) are: {coos[0].value}."
+    #     page.update()
 
-        print(values)
+    #     values = []
+    #     for i in coos:
+    #         values.append(i.value)
 
-    def button_clicked_tema(e):
-        t.value = f"Dropdown value is:  {dd.value}"
-        page.update()
+    #     print(values)
 
-    t = ft.Text()
+    # def button_clicked_tema(e):
+    #     t.value = f"Dropdown value is:  {dd.value}"
+    #     page.update()
+
+    # t = ft.Text()
 
     coos = []
     rows = 1
@@ -93,8 +100,6 @@ def main(page: ft.Page):
 
     )
 
-    b = ft.ElevatedButton(text="Submit", on_click=button_clicked)
-
     resultado = """
     1  2  3  4  5
     6  7  8  9  10
@@ -102,17 +107,7 @@ def main(page: ft.Page):
     16 17 18 19 20
     21 22 23 24 25"""
 
-    page.window_center()
-    page.title = "Matrix Calculator"
-    page.window_height = 600
-    page.window_width = 1060
-
-    def page_resize(e):
-        print("New page size:", page.window_width, page.window_height)
-
-    page.on_resize = page_resize
-
-    dd = ft.Dropdown(
+    list_tema = ft.Dropdown(
         text_size=13,
         width=220,
         height=50,
@@ -129,21 +124,18 @@ def main(page: ft.Page):
         autofocus=True
     )
 
-    b = ft.ElevatedButton(text="Submit", on_click=button_clicked_tema)
-
     page.add(
         ft.Column(
             [
                 ft.Text(
                     "Matriz de 5 x 5"
-                ),
-                b, t
+                )
             ]
         ),
         ft.Row(
             [
                 ft.Container(
-                    dd,
+                    list_tema,
                     ft.TextStyle(color=ft.colors.BLACK),
                     bgcolor="#FFA132",
                     padding=5,
@@ -221,11 +213,14 @@ def main(page: ft.Page):
                     alignment=ft.alignment.center,
                 ),
             ]
-        ),
-        b, t
-
+        )
     )
 
+    def page_resize(e):
+        print("New page size:", page.window_width, page.window_height)
 
-ft.app(target=main)
-# ft.app(target=main, view=ft.AppView.WEB_BROWSER)
+    page.on_resize = page_resize
+
+
+# ft.app(target=main)
+ft.app(target=main, view=ft.AppView.WEB_BROWSER)
