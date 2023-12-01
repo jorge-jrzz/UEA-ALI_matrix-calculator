@@ -90,6 +90,47 @@ def main(page: ft.Page):
 
         page.update()
 
+    def sub_subject_changed(e):
+        subject = input_tema.value
+        sub_subject = ""
+        if subject == "Matrices":
+            sub_subject = input_subtema_op.value
+            if sub_subject == "Suma":
+                row_botones.controls.clear()
+                row_botones.controls.append(main_subject)
+                row_botones.controls.append(ops_matrices)
+                row_botones.controls.append(size_matrices)
+            elif sub_subject == "Resta":
+                row_botones.controls.clear()
+                row_botones.controls.append(main_subject)
+                row_botones.controls.append(ops_matrices)
+                row_botones.controls.append(size_matrices)
+            elif sub_subject == "Multiplicacion por un escalar":
+                row_botones.controls.clear()
+                row_botones.controls.append(main_subject)
+                row_botones.controls.append(ops_matrices)
+                row_botones.controls.append(size_matrices)
+            elif sub_subject == "Multiplicacion de matrices":
+                row_botones.controls.clear()
+                row_botones.controls.append(main_subject)
+                row_botones.controls.append(ops_matrices)
+                row_botones.controls.append(size_matrices)
+            elif sub_subject == "Inversión de matrices":
+                row_botones.controls.clear()
+                row_botones.controls.append(main_subject)
+                row_botones.controls.append(ops_matrices)
+                row_botones.controls.append(size_matrices)
+        elif subject == "Determinantes":
+            sub_subject = input_subtema_det.value
+            if sub_subject == "Método de cofactores":
+                pass
+            elif sub_subject == "Método de expansión de Laplace.":
+                pass
+        elif subject == "Aplicaiones":
+            pass
+
+        page.update()
+
     # Boton para la eleccion de tema
     input_tema = ft.Dropdown(
         on_change=subject_changed,
@@ -111,6 +152,7 @@ def main(page: ft.Page):
 
     # Boton para la eleccion del subtema
     input_subtema_op = ft.Dropdown(
+        on_change=sub_subject_changed,
         text_size=13,
         width=220,
         height=50,
@@ -124,7 +166,8 @@ def main(page: ft.Page):
                 "Multiplicacion por un escalar"),
             ft.dropdown.Option("Multiplicacion de matrices"),
             ft.dropdown.Option("Inversión de matrices")
-        ]
+        ],
+        autofocus=True
     )
 
     # Boton para la eleccion del subtema DE DETERMINANTES
@@ -138,7 +181,8 @@ def main(page: ft.Page):
         options=[
             ft.dropdown.Option("Método de cofactores"),
             ft.dropdown.Option("Método de expansión de Laplace.")
-        ]
+        ],
+        autofocus=True
     )
 
     # Boton selecionado para la aplicacion
@@ -171,7 +215,8 @@ def main(page: ft.Page):
             ft.dropdown.Option("3 x 4"),
             ft.dropdown.Option("2 x 4"),
             ft.dropdown.Option("5 x 5")
-        ]
+        ],
+        autofocus=True
     )
 
     # Contenedor del boton para la seleccion del tema
