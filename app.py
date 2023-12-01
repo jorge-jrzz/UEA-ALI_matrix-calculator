@@ -1,30 +1,19 @@
-# import flet as ft
-
-
-# def main(page: ft.Page):
-#     def button_clicked(e):
-#         t.value = f"Dropdown value is:  {dd.value}"
-#         page.update()
-
-#     t = ft.Text()
-#     b = ft.ElevatedButton(text="Submit", on_click=button_clicked)
-#     dd = ft.Dropdown(
-#         width=100,
-#         options=[
-#             ft.dropdown.Option("Red"),
-#             ft.dropdown.Option("Green"),
-#             ft.dropdown.Option("Blue"),
-#         ],
-#     )
-#     page.add(dd, b, t)
-
-
-# ft.app(target=main)
+# Autor: Jorge Jusrez
 
 import flet as ft
 
 
 def main(page: ft.Page):
+
+    coos = []
+    rows = 1
+    colums = 0
+    resultado = """
+        1  2  3  4  5
+        6  7  8  9  10
+        11 12 13 14 15
+        16 17 18 19 20
+        21 22 23 24 25"""
 
     page.window_center()
     page.title = "Matrix Calculator"
@@ -33,29 +22,10 @@ def main(page: ft.Page):
     page.vertical_alignment = "center"
     page.horizontal_alignment = "center"
 
-    #  def button_clicked(e):  # Funcion para recolectar la informacion de los inputs
-    #     t.value = f"Textboxe value of (1, 1) are: {coos[0].value}."
-    #     page.update()
-
-    #     values = []
-    #     for i in coos:
-    #         values.append(i.value)
-
-    #     print(values)
-
-    # def button_clicked_tema(e):
-    #     t.value = f"Dropdown value is:  {dd.value}"
-    #     page.update()
-
-    # t = ft.Text()
-
-    coos = []
-    rows = 1
-    colums = 0
+    # Creacion de inputs para la matriz
     for i in range(1, 26):
         colums += 1
-        coo = ft.TextField(  # label=f"({rows}, {colums})",
-            # label_style=ft.TextStyle(size=10),
+        coo = ft.TextField(
             border=ft.InputBorder.NONE,
             max_length=3,
             counter_style=ft.TextStyle(size=0),
@@ -75,6 +45,7 @@ def main(page: ft.Page):
             rows += 1
             colums = 0
 
+    # Creacion de la matriz con los inputs
     def items(count):
         items = []
         for i in range(1, count + 1):
@@ -91,23 +62,31 @@ def main(page: ft.Page):
 
         return items
 
+    # Acomodo de los inputs en una matriz de 5 x 5
     row = ft.Row(
         wrap=True,
         spacing=10,
         run_spacing=10,
         controls=items(25),
-        width=320,
-
+        width=320
     )
 
-    resultado = """
-    1  2  3  4  5
-    6  7  8  9  10
-    11 12 13 14 15
-    16 17 18 19 20
-    21 22 23 24 25"""
+    def subject_changed(e):
+        subject = input_tema.value
+        if subject == "Matrices":
+            row_botones.controls.clear()
+            row_botones.controls.append(main_subject)
+            row_botones.controls.append(ops_matrices)
+        elif subject == "Determinantes":
+            row_botones.controls.clear()
+            row_botones.controls.append(main_subject)
+            row_botones.controls.append(ops_det)
 
-    list_tema = ft.Dropdown(
+        page.update()
+
+    # Boton para la eleccion de tema
+    input_tema = ft.Dropdown(
+        on_change=subject_changed,
         text_size=13,
         width=220,
         height=50,
@@ -124,75 +103,102 @@ def main(page: ft.Page):
         autofocus=True
     )
 
-    page.add(
-        ft.Column(
-            [
-                ft.Text(
-                    "Matriz de 5 x 5"
-                )
-            ]
-        ),
-        ft.Row(
-            [
-                ft.Container(
-                    list_tema,
-                    ft.TextStyle(color=ft.colors.BLACK),
-                    bgcolor="#FFA132",
-                    padding=5,
-                    border_radius=ft.border_radius.all(5)
-                ),
-                ft.Container(
-                    ft.Dropdown(
-                        text_size=13,
-                        width=220,
-                        height=50,
-                        label="subtema",
-                        hint_text="Elige un subtema",
-                        hint_style=ft.TextStyle(color=ft.colors.BLACK),
-                        options=[
-                            ft.dropdown.Option("Suma"),
-                            ft.dropdown.Option("Resta"),
-                            ft.dropdown.Option(
-                                "Multiplicacion por un escalar"),
-                            ft.dropdown.Option("Multiplicacion de matrices"),
-                            ft.dropdown.Option("Inversión de matrices"),
-                        ]
-                    ),
-                    ft.TextStyle(color=ft.colors.BLACK),
-                    bgcolor="#FFA132",
-                    padding=5,
-                    border_radius=ft.border_radius.all(5)
-                ),
-                ft.Container(
-                    ft.Dropdown(
-                        text_size=13,
-                        width=220,
-                        height=50,
-                        bgcolor="#FFDEA5",
-                        label="Tamaño de matrices",
-                        hint_text="Elige el tamaño de matrices",
-                        hint_style=ft.TextStyle(color=ft.colors.BLACK),
-                        options=[
-                            ft.dropdown.Option("2 x 2"),
-                            ft.dropdown.Option("2 x 3"),
-                            ft.dropdown.Option("3 x 3"),
-                            ft.dropdown.Option("3 x 2"),
-                            ft.dropdown.Option("4 x 2"),
-                            ft.dropdown.Option("4 x 3"),
-                            ft.dropdown.Option("4 x 4"),
-                            ft.dropdown.Option("3 x 4"),
-                            ft.dropdown.Option("2 x 4"),
-                            ft.dropdown.Option("5 x 5")
-                        ],
-                        autofocus=True
-                    ),
-                    ft.TextStyle(color=ft.colors.BLACK),
-                    bgcolor="#FFDEA5",
-                    padding=5,
-                    border_radius=ft.border_radius.all(5)
-                )
-            ]
-        ),
+    # Boton para la eleccion del subtema
+    input_subtema_op = ft.Dropdown(
+        text_size=13,
+        width=220,
+        height=50,
+        label="subtema",
+        hint_text="Elige un subtema",
+        hint_style=ft.TextStyle(color=ft.colors.BLACK),
+        options=[
+            ft.dropdown.Option("Suma"),
+            ft.dropdown.Option("Resta"),
+            ft.dropdown.Option(
+                "Multiplicacion por un escalar"),
+            ft.dropdown.Option("Multiplicacion de matrices"),
+            ft.dropdown.Option("Inversión de matrices")
+        ]
+    )
+
+    # Boton para la eleccion del subtema DE DETERMINANTES
+    input_subtema_det = ft.Dropdown(
+        text_size=13,
+        width=220,
+        height=50,
+        label="subtema",
+        hint_text="Elige un subtema",
+        hint_style=ft.TextStyle(color=ft.colors.BLACK),
+        options=[
+            ft.dropdown.Option("Método de cofactores"),
+            ft.dropdown.Option("Método de expansión de Laplace.")
+        ]
+    )
+
+    # Boton para la eleccion de tamaño de matrices
+    input_tamaño_matriz = ft.Dropdown(
+        text_size=13,
+        width=220,
+        height=50,
+        bgcolor="#FFDEA5",
+        label="Tamaño de matrices",
+        hint_text="Elige el tamaño de matrices",
+        hint_style=ft.TextStyle(color=ft.colors.BLACK),
+        options=[
+            ft.dropdown.Option("2 x 2"),
+            ft.dropdown.Option("2 x 3"),
+            ft.dropdown.Option("3 x 3"),
+            ft.dropdown.Option("3 x 2"),
+            ft.dropdown.Option("4 x 2"),
+            ft.dropdown.Option("4 x 3"),
+            ft.dropdown.Option("4 x 4"),
+            ft.dropdown.Option("3 x 4"),
+            ft.dropdown.Option("2 x 4"),
+            ft.dropdown.Option("5 x 5")
+        ]
+    )
+
+    main_subject = ft.Container(
+        input_tema,
+        ft.TextStyle(color=ft.colors.BLACK),
+        bgcolor="#FFA132",
+        padding=5,
+        border_radius=ft.border_radius.all(5)
+    )
+
+    ops_matrices = ft.Container(
+        input_subtema_op,
+        ft.TextStyle(color=ft.colors.BLACK),
+        bgcolor="#FFA132",
+        padding=5,
+        border_radius=ft.border_radius.all(5)
+    )
+
+    ops_det = ft.Container(
+        input_subtema_det,
+        ft.TextStyle(color=ft.colors.BLACK),
+        bgcolor="#FFA132",
+        padding=5,
+        border_radius=ft.border_radius.all(5)
+    )
+
+    size_matrices = ft.Container(
+        input_tamaño_matriz,
+        ft.TextStyle(color=ft.colors.BLACK),
+        bgcolor="#FFDEA5",
+        padding=5,
+        border_radius=ft.border_radius.all(5)
+    )
+
+    row_botones = ft.Row(
+        [main_subject]
+    )
+
+    # Contenedor de los botones (tema, subtema, tamaño de matrices)
+    botones = ft.Container(row_botones)
+
+    # Contenedor de las matrices
+    matrices = ft.Container(
         ft.Row(
             [
                 ft.Container(content=row, bgcolor="#FFDEA5",
@@ -210,17 +216,26 @@ def main(page: ft.Page):
                     width=310,
                     height=310,
                     border_radius=ft.border_radius.all(5),
-                    alignment=ft.alignment.center,
-                ),
+                    alignment=ft.alignment.center
+                )
             ]
         )
     )
 
-    def page_resize(e):
-        print("New page size:", page.window_width, page.window_height)
+    # Contenedor principal de la aplicacion
+    main_conteiner = ft.Container(ft.Column([botones, matrices]))
 
-    page.on_resize = page_resize
+    page.add(main_conteiner)
+
+    # Funcion para el saber el tamaño de la aplicacion en tiempo real
+    # def page_resize(e):
+    #     print("New page size:", page.window_width, page.window_height)
+
+    # page.on_resize = page_resize
 
 
-# ft.app(target=main)
-ft.app(target=main, view=ft.AppView.WEB_BROWSER)
+# Ejecucion en aplicacion de escritorio
+ft.app(target=main)
+
+# Ejecucion en local host
+# ft.app(target=main, view=ft.AppView.WEB_BROWSER)
