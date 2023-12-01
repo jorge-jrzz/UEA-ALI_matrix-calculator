@@ -3,17 +3,19 @@
 import flet as ft
 
 
+coos = []
+rows = 1
+colums = 0
+resultado = """1  2  3  4  5
+6  7  8  9  10
+11 12 13 14 15
+16 17 18 19 20
+21 22 23 24 25"""
+
+
 def main(page: ft.Page):
 
-    coos = []
-    rows = 1
-    colums = 0
-    resultado = """
-        1  2  3  4  5
-        6  7  8  9  10
-        11 12 13 14 15
-        16 17 18 19 20
-        21 22 23 24 25"""
+    global coos, rows, colums, resultado
 
     page.window_center()
     page.title = "Matrix Calculator"
@@ -158,6 +160,7 @@ def main(page: ft.Page):
         ]
     )
 
+    # Contenedor del boton para la seleccion del tema
     main_subject = ft.Container(
         input_tema,
         ft.TextStyle(color=ft.colors.BLACK),
@@ -166,6 +169,7 @@ def main(page: ft.Page):
         border_radius=ft.border_radius.all(5)
     )
 
+    # Contenedor del boton para la seleccion del subtema de operaciones con matrices
     ops_matrices = ft.Container(
         input_subtema_op,
         ft.TextStyle(color=ft.colors.BLACK),
@@ -174,6 +178,7 @@ def main(page: ft.Page):
         border_radius=ft.border_radius.all(5)
     )
 
+    # Contenedor del boton para la seleccion del subtema de determinantes
     ops_det = ft.Container(
         input_subtema_det,
         ft.TextStyle(color=ft.colors.BLACK),
@@ -182,6 +187,7 @@ def main(page: ft.Page):
         border_radius=ft.border_radius.all(5)
     )
 
+    # Contenedor del boton para la seleccion del tamaño de matrices
     size_matrices = ft.Container(
         input_tamaño_matriz,
         ft.TextStyle(color=ft.colors.BLACK),
@@ -190,6 +196,7 @@ def main(page: ft.Page):
         border_radius=ft.border_radius.all(5)
     )
 
+    # Fila de botones (tema, subtema, tamaño de matrices)
     row_botones = ft.Row(
         [main_subject]
     )
