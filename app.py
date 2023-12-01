@@ -122,10 +122,11 @@ def main(page: ft.Page):
                 row_botones.controls.append(size_matrices)
         elif subject == "Determinantes":
             sub_subject = input_subtema_det.value
-            if sub_subject == "Método de cofactores":
-                pass
-            elif sub_subject == "Método de expansión de Laplace.":
-                pass
+            if sub_subject == "Método de cofactores" or sub_subject == "Método de expansión de Laplace.":
+                row_botones.controls.clear()
+                row_botones.controls.append(main_subject)
+                row_botones.controls.append(ops_matrices)
+                row_botones.controls.append(size_matrices_2)
         elif subject == "Aplicaiones":
             pass
 
@@ -172,6 +173,7 @@ def main(page: ft.Page):
 
     # Boton para la eleccion del subtema DE DETERMINANTES
     input_subtema_det = ft.Dropdown(
+        on_change=sub_subject_changed,
         text_size=13,
         width=220,
         height=50,
@@ -219,6 +221,24 @@ def main(page: ft.Page):
         autofocus=True
     )
 
+    # Boton para la eleccion de tamaño de matrices cuadradas
+    input_tamaño_matriz_cuadrada = ft.Dropdown(
+        text_size=13,
+        width=220,
+        height=50,
+        bgcolor="#FFDEA5",
+        label="Tamaño de matrices",
+        hint_text="Elige el tamaño de matrices",
+        hint_style=ft.TextStyle(color=ft.colors.BLACK),
+        options=[
+            ft.dropdown.Option("2 x 2"),
+            ft.dropdown.Option("3 x 3"),
+            ft.dropdown.Option("4 x 4"),
+            ft.dropdown.Option("5 x 5")
+        ],
+        autofocus=True
+    )
+
     # Contenedor del boton para la seleccion del tema
     main_subject = ft.Container(
         input_tema,
@@ -258,6 +278,15 @@ def main(page: ft.Page):
     # Contenedor del boton para la seleccion del tamaño de matrices
     size_matrices = ft.Container(
         input_tamaño_matriz,
+        ft.TextStyle(color=ft.colors.BLACK),
+        bgcolor="#FFDEA5",
+        padding=5,
+        border_radius=ft.border_radius.all(5)
+    )
+
+    # Contenedor del boton para la seleccion del tamaño de matrices cuadradas
+    size_matrices_2 = ft.Container(
+        input_tamaño_matriz_cuadrada,
         ft.TextStyle(color=ft.colors.BLACK),
         bgcolor="#FFDEA5",
         padding=5,
