@@ -83,6 +83,10 @@ def main(page: ft.Page):
             row_botones.controls.clear()
             row_botones.controls.append(main_subject)
             row_botones.controls.append(ops_det)
+        elif subject == "Aplicaiones":
+            row_botones.controls.clear()
+            row_botones.controls.append(main_subject)
+            row_botones.controls.append(aplications)
 
         page.update()
 
@@ -137,6 +141,16 @@ def main(page: ft.Page):
         ]
     )
 
+    # Boton selecionado para la aplicacion
+    input_subtema_ap = ft.Dropdown(
+        text_size=13,
+        width=220,
+        height=50,
+        label="Criptografía de Hill",
+        label_style=ft.TextStyle(color=ft.colors.BLACK),
+        disabled=True
+    )
+
     # Boton para la eleccion de tamaño de matrices
     input_tamaño_matriz = ft.Dropdown(
         text_size=13,
@@ -181,6 +195,15 @@ def main(page: ft.Page):
     # Contenedor del boton para la seleccion del subtema de determinantes
     ops_det = ft.Container(
         input_subtema_det,
+        ft.TextStyle(color=ft.colors.BLACK),
+        bgcolor="#FFA132",
+        padding=5,
+        border_radius=ft.border_radius.all(5)
+    )
+
+    # Contenedor del boton para la seleccion de la aplicacion
+    aplications = ft.Container(
+        input_subtema_ap,
         ft.TextStyle(color=ft.colors.BLACK),
         bgcolor="#FFA132",
         padding=5,
