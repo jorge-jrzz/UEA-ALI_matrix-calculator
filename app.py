@@ -12,6 +12,18 @@ resultado = """1  2  3  4  5
 16 17 18 19 20
 21 22 23 24 25"""
 
+# Tamaño para las matrices
+DOS_X_DOS = 160
+DOS_X_TRES = 240
+TRES_X_TRES = 200
+TRES_X_DOS = 160
+CUATRO_X_DOS = 120
+CUATRO_X_TRES = 200
+CUATRO_X_CUATRO = 280
+TRES_X_CUATRO = 280
+DOS_X_CUATRO = 280
+CINCO_X_CINCO = 320
+
 
 def main(page: ft.Page):
 
@@ -25,27 +37,32 @@ def main(page: ft.Page):
     page.horizontal_alignment = "center"
 
     # Creacion de inputs para la matriz
-    for i in range(1, 26):
-        colums += 1
-        coo = ft.TextField(
-            border=ft.InputBorder.NONE,
-            max_length=3,
-            counter_style=ft.TextStyle(size=0),
-            text_size=12,
-            text_align=ft.TextAlign.CENTER,
-            hint_text=f"({rows}, {colums})",
-            hint_style=ft.TextStyle(
-                size=10,
-                color=ft.colors.GREY),
-            filled=True,
-            width=55,
-            height=50,
-            bgcolor=ft.colors.WHITE,
-        )
-        coos.append(coo)
-        if colums == 5:
-            rows += 1
-            colums = 0
+    def create_inputs(colums, rows):
+        for i in range(1, 26):
+            colums += 1
+            coo = ft.TextField(
+                border=ft.InputBorder.NONE,
+                max_length=3,
+                counter_style=ft.TextStyle(size=0),
+                text_size=12,
+                text_align=ft.TextAlign.CENTER,
+                hint_text=f"({rows}, {colums})",
+                hint_style=ft.TextStyle(
+                    size=10,
+                    color=ft.colors.GREY),
+                filled=True,
+                width=55,
+                height=50,
+                bgcolor=ft.colors.WHITE,
+            )
+            coos.append(coo)
+            if colums == 5:
+                rows += 1
+                colums = 0
+
+        return coos
+
+    coos = create_inputs(colums, rows)
 
     # Creacion de la matriz con los inputs
     def items(count):
@@ -53,7 +70,7 @@ def main(page: ft.Page):
         for i in range(1, count + 1):
             items.append(
                 ft.Container(
-                    content=coos[i-1],
+                    content=create_inputs(colums, rows)[i-1],
                     alignment=ft.alignment.center,
                     width=55,
                     height=50,
@@ -63,15 +80,6 @@ def main(page: ft.Page):
             )
 
         return items
-
-    # Acomodo de los inputs en una matriz de 5 x 5
-    row = ft.Row(
-        wrap=True,
-        spacing=10,
-        run_spacing=10,
-        controls=items(25),
-        width=320
-    )
 
     def subject_changed(e):
         subject = input_tema.value
@@ -132,6 +140,62 @@ def main(page: ft.Page):
 
         page.update()
 
+    # Funcion para convertir el tamaño de la matriz en un numero
+    def convert_size(matriz_size):
+        size = matriz_size.split("x")
+        return int(size[0]) * int(size[1])
+
+    def size_changed(e):
+        subject = input_tema.value
+        sub_subject = ""
+        if subject == "Matrices":
+            sub_subject = input_subtema_op.value
+            size_it = input_size_matriz.value
+
+        elif subject == "Determinantes":
+            sub_subject = input_subtema_det.value
+            size_it = input_size_matriz_2.value
+
+        itemss = convert_size(size_it)
+        size = get_size(size_it)
+
+        # b = get_matrix_b()
+        ma = return_matrix(itemss, size)
+
+        matriz_a.content.controls.clear()
+        matriz_b.content.controls.clear()
+        coos.clear()
+        matriz_b.content.controls.append(ma)
+        # a.content.controls.clear()
+        # a.content.controls.append(return_matrix(itemss, size))
+        # b.content.controls.clear()
+        matriz_a.content.controls.append(return_matrix(itemss, size))
+        # b.content.controls.append(return_matrix(itemss, size))
+
+        page.update()
+
+    def get_size(size_in) -> int:
+        if size_in == "2 x 2":
+            return DOS_X_DOS
+        elif size_in == "2 x 3":
+            return DOS_X_TRES
+        elif size_in == "3 x 3":
+            return TRES_X_TRES
+        elif size_in == "3 x 2":
+            return TRES_X_DOS
+        elif size_in == "4 x 2":
+            return CUATRO_X_DOS
+        elif size_in == "4 x 3":
+            return CUATRO_X_TRES
+        elif size_in == "4 x 4":
+            return CUATRO_X_CUATRO
+        elif size_in == "3 x 4":
+            return TRES_X_CUATRO
+        elif size_in == "2 x 4":
+            return DOS_X_CUATRO
+        elif size_in == "5 x 5":
+            return CINCO_X_CINCO
+
     # Boton para la eleccion de tema
     input_tema = ft.Dropdown(
         on_change=subject_changed,
@@ -146,7 +210,6 @@ def main(page: ft.Page):
             ft.dropdown.Option("Matrices"),
             ft.dropdown.Option("Determinantes"),
             ft.dropdown.Option("Aplicaiones")
-
         ],
         autofocus=True
     )
@@ -187,7 +250,7 @@ def main(page: ft.Page):
         autofocus=True
     )
 
-    # Boton selecionado para la aplicacion
+    # Boton selecionado para la aplicacion de criptografia de hill
     input_subtema_ap = ft.Dropdown(
         text_size=13,
         width=220,
@@ -198,7 +261,8 @@ def main(page: ft.Page):
     )
 
     # Boton para la eleccion de tamaño de matrices
-    input_tamaño_matriz = ft.Dropdown(
+    input_size_matriz = ft.Dropdown(
+        on_change=size_changed,
         text_size=13,
         width=220,
         height=50,
@@ -222,7 +286,8 @@ def main(page: ft.Page):
     )
 
     # Boton para la eleccion de tamaño de matrices cuadradas
-    input_tamaño_matriz_cuadrada = ft.Dropdown(
+    input_size_matriz_2 = ft.Dropdown(
+        on_change=size_changed,
         text_size=13,
         width=220,
         height=50,
@@ -277,7 +342,7 @@ def main(page: ft.Page):
 
     # Contenedor del boton para la seleccion del tamaño de matrices
     size_matrices = ft.Container(
-        input_tamaño_matriz,
+        input_size_matriz,
         ft.TextStyle(color=ft.colors.BLACK),
         bgcolor="#FFDEA5",
         padding=5,
@@ -286,7 +351,7 @@ def main(page: ft.Page):
 
     # Contenedor del boton para la seleccion del tamaño de matrices cuadradas
     size_matrices_2 = ft.Container(
-        input_tamaño_matriz_cuadrada,
+        input_size_matriz_2,
         ft.TextStyle(color=ft.colors.BLACK),
         bgcolor="#FFDEA5",
         padding=5,
@@ -301,15 +366,66 @@ def main(page: ft.Page):
     # Contenedor de los botones (tema, subtema, tamaño de matrices)
     botones = ft.Container(row_botones)
 
+    # Funcion para el acomodo de los inputs en una matriz de 5 x 5
+
+    def return_matrix(itemss=25, size=CINCO_X_CINCO):
+        row = ft.Row(
+            wrap=True,
+            spacing=10,
+            run_spacing=10,
+            controls=items(itemss),
+            width=size
+        )
+        return row
+
+    # Obtener de la Matriz A
+    # def get_matrix_a():
+    #     matriz_a = ft.Container(
+    #         content=return_matrix(),
+    #         bgcolor="#FFDEA5",
+    #         padding=10,
+    #         border_radius=ft.border_radius.all(5)
+    #     )
+    #     return matriz_a
+
+    matriz_a = ft.Container(
+        content=return_matrix(),
+        bgcolor="#FFDEA5",
+        padding=10,
+        border_radius=ft.border_radius.all(5)
+    )
+
+    # Obtener de la Matriz B
+    # def get_matrix_b():
+    #     matriz_b = ft.Container(
+    #         content=return_matrix(),
+    #         bgcolor="#FFDEA4",
+    #         padding=10,
+    #         border_radius=ft.border_radius.all(5)
+    #     )
+    #     return matriz_b
+
+    matriz_b = ft.Container(
+        content=return_matrix(),
+        bgcolor="#FFDEA4",
+        padding=10,
+        border_radius=ft.border_radius.all(5)
+    )
+
+    # Operacion
+    operation = ft.Container(
+        ft.Text(" + ")
+    )
+
     # Contenedor de las matrices
     matrices = ft.Container(
         ft.Row(
             [
-                ft.Container(content=row, bgcolor="#FFDEA5",
-                             padding=10, border_radius=ft.border_radius.all(5)),
-                ft.Text(" + "),
-                ft.Container(content=row, bgcolor="#FFDEA5",
-                             padding=10, border_radius=ft.border_radius.all(5)),
+                # get_matrix_a(),  # Matriz A
+                matriz_a,  # Matriz A
+                operation,
+                matriz_b,  # Matriz B
+                # get_matrix_b(),  # Matriz B
                 ft.Text(" = "),
                 ft.Container(
                     content=ft.Text(
@@ -341,5 +457,5 @@ def main(page: ft.Page):
 # Ejecucion en aplicacion de escritorio
 ft.app(target=main)
 
-# Ejecucion en local host
+# Ejecucion en local host ( navegador web )
 # ft.app(target=main, view=ft.AppView.WEB_BROWSER)
