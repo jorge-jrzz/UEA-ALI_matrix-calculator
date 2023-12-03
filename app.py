@@ -29,6 +29,7 @@ def main(page: ft.Page):
 
     global coos, rows, colums, resultado
 
+    # Configuracion de la pagina
     page.window_center()
     page.title = "Matrix Calculator"
     page.window_height = 600
@@ -62,8 +63,6 @@ def main(page: ft.Page):
 
         return coos
 
-    coos = create_inputs(colums, rows)
-
     # Creacion de la matriz con los inputs
     def items(count):
         items = []
@@ -81,6 +80,7 @@ def main(page: ft.Page):
 
         return items
 
+    # Funcion para la eleccion del tema
     def subject_changed(e):
         subject = input_tema.value
         if subject == "Matrices":
@@ -98,6 +98,7 @@ def main(page: ft.Page):
 
         page.update()
 
+    # Funcion para la eleccion del subtema
     def sub_subject_changed(e):
         subject = input_tema.value
         sub_subject = ""
@@ -145,6 +146,7 @@ def main(page: ft.Page):
         size = matriz_size.split("x")
         return int(size[0]) * int(size[1])
 
+    # Funcion para el cambio de tamaño de la matriz
     def size_changed(e):
         subject = input_tema.value
         sub_subject = ""
@@ -159,21 +161,15 @@ def main(page: ft.Page):
         itemss = convert_size(size_it)
         size = get_size(size_it)
 
-        # b = get_matrix_b()
-        ma = return_matrix(itemss, size)
-
         matriz_a.content.controls.clear()
         matriz_b.content.controls.clear()
         coos.clear()
-        matriz_b.content.controls.append(ma)
-        # a.content.controls.clear()
-        # a.content.controls.append(return_matrix(itemss, size))
-        # b.content.controls.clear()
+        matriz_b.content.controls.append(return_matrix(itemss, size))
         matriz_a.content.controls.append(return_matrix(itemss, size))
-        # b.content.controls.append(return_matrix(itemss, size))
 
         page.update()
 
+    # Funcion para obtener el tamaño de la matriz
     def get_size(size_in) -> int:
         if size_in == "2 x 2":
             return DOS_X_DOS
@@ -367,7 +363,6 @@ def main(page: ft.Page):
     botones = ft.Container(row_botones)
 
     # Funcion para el acomodo de los inputs en una matriz de 5 x 5
-
     def return_matrix(itemss=25, size=CINCO_X_CINCO):
         row = ft.Row(
             wrap=True,
@@ -378,32 +373,12 @@ def main(page: ft.Page):
         )
         return row
 
-    # Obtener de la Matriz A
-    # def get_matrix_a():
-    #     matriz_a = ft.Container(
-    #         content=return_matrix(),
-    #         bgcolor="#FFDEA5",
-    #         padding=10,
-    #         border_radius=ft.border_radius.all(5)
-    #     )
-    #     return matriz_a
-
     matriz_a = ft.Container(
         content=return_matrix(),
         bgcolor="#FFDEA5",
         padding=10,
         border_radius=ft.border_radius.all(5)
     )
-
-    # Obtener de la Matriz B
-    # def get_matrix_b():
-    #     matriz_b = ft.Container(
-    #         content=return_matrix(),
-    #         bgcolor="#FFDEA4",
-    #         padding=10,
-    #         border_radius=ft.border_radius.all(5)
-    #     )
-    #     return matriz_b
 
     matriz_b = ft.Container(
         content=return_matrix(),
@@ -421,11 +396,9 @@ def main(page: ft.Page):
     matrices = ft.Container(
         ft.Row(
             [
-                # get_matrix_a(),  # Matriz A
                 matriz_a,  # Matriz A
                 operation,
                 matriz_b,  # Matriz B
-                # get_matrix_b(),  # Matriz B
                 ft.Text(" = "),
                 ft.Container(
                     content=ft.Text(
