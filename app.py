@@ -39,8 +39,8 @@ def main(page: ft.Page):
     page.horizontal_alignment = "center"
 
     # Creacion de inputs para la matriz
-    def create_inputs(colums, rows):
-        for i in range(1, 26):
+    def create_inputs(colums, rows, limt=26):
+        for i in range(1, limt):
             colums += 1
             coo = ft.TextField(
                 border=ft.InputBorder.NONE,
@@ -66,10 +66,22 @@ def main(page: ft.Page):
 
     # Creacion de la matriz con los inputs
     def items(count):
+
+        # in_size_op = input_size_matriz.value
+        # in_size_det = input_size_matriz_2.value
+
+        # if in_size_op is None and in_size_det is None:
+        #     limt = 26
+        # elif in_size_det is None:
+        #     limt = convert_size(in_size_op)+1
+        # elif in_size_op is None:
+        #     limt = convert_size(in_size_det)+1
+
         items = []
         for i in range(1, count + 1):
             items.append(
                 ft.Container(
+                    # content=create_inputs(colums, rows, limt=limt)[i-1],
                     content=create_inputs(colums, rows)[i-1],
                     alignment=ft.alignment.center,
                     width=55,
@@ -130,13 +142,17 @@ def main(page: ft.Page):
                 row_botones.controls.append(main_subject)
                 row_botones.controls.append(ops_matrices)
                 row_botones.controls.append(size_matrices)
+            input_size_matriz_2.value = None
+
         elif subject == "Determinantes":
             sub_subject = input_subtema_det.value
-            if sub_subject == "Método de cofactores" or sub_subject == "Método de expansión de Laplace.":
+            if sub_subject == "Método de cofactores" or sub_subject == "Método de expansión de Laplace":
                 row_botones.controls.clear()
                 row_botones.controls.append(main_subject)
                 row_botones.controls.append(ops_det)
                 row_botones.controls.append(size_matrices_2)
+            input_size_matriz.value = None
+
         elif subject == "Aplicaiones":
             pass
 
@@ -150,16 +166,16 @@ def main(page: ft.Page):
     # Funcion para el cambio de tamaño de la matriz
     def size_changed(e):
         subject = input_tema.value
-        sub_subject_2 = ""
+        # sub_subject_2 = ""
         size_it = ""
         itemss = 0
         if subject == "Matrices":
-            sub_subject_2 = input_subtema_op.value
+            # sub_subject_2 = input_subtema_op.value
             size_it = input_size_matriz.value
             itemss = convert_size(size_it)
 
         elif subject == "Determinantes":
-            sub_subject_2 = input_subtema_det.value
+            # sub_subject_2 = input_subtema_det.value
             size_it = input_size_matriz_2.value
             itemss = convert_size(size_it)
 
@@ -193,6 +209,8 @@ def main(page: ft.Page):
             return DOS_X_CUATRO
         elif size_in == "5 x 5":
             return CINCO_X_CINCO
+        else:
+            return None
 
     # Boton para la eleccion de tema
     input_tema = ft.Dropdown(
@@ -243,7 +261,7 @@ def main(page: ft.Page):
         hint_style=ft.TextStyle(color=ft.colors.BLACK),
         options=[
             ft.dropdown.Option("Método de cofactores"),
-            ft.dropdown.Option("Método de expansión de Laplace.")
+            ft.dropdown.Option("Método de expansión de Laplace")
         ],
         autofocus=True
     )
@@ -353,7 +371,6 @@ def main(page: ft.Page):
         ft.TextStyle(color=ft.colors.BLACK),
         bgcolor="#FFDEA5",
         padding=5,
-        border_radius=ft.border_radius.all(5)
     )
 
     # Fila de botones (tema, subtema, tamaño de matrices)
@@ -366,21 +383,23 @@ def main(page: ft.Page):
 
     # Funcion para el acomodo de los inputs en una matriz de 5 x 5
     def return_matrix(itemss=25):
+
         in_size_op = get_size(input_size_matriz.value)
         in_size_det = get_size(input_size_matriz_2.value)
-        if in_size_op == None and in_size_det == None:
+
+        if in_size_op is None and in_size_det is None:
             size = CINCO_X_CINCO
-        elif in_size_op == None:
-            size = in_size_det
-        else:
+        elif in_size_det is None:
             size = in_size_op
-        # size = insize if insize != None else CINCO_X_CINCO
+        elif in_size_op is None:
+            size = in_size_det
+
         row = ft.Row(
             wrap=True,
             spacing=10,
             run_spacing=10,
             controls=items(itemss),
-            width=size,
+            width=size
         )
 
         return row
@@ -396,12 +415,9 @@ def main(page: ft.Page):
     # Matriz B
     matriz_b = ft.Container(
         content=return_matrix(),
-        # bgcolor="#FFDEA4",
-        bgcolor=ft.colors.BLACK,
+        bgcolor="#FFDEA5",
         padding=10,
         border_radius=ft.border_radius.all(5),
-
-        alignment=ft.Alignment(0, 0),
     )
 
     # Operacion
