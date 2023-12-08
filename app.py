@@ -39,8 +39,9 @@ def main(page: ft.Page):
     page.horizontal_alignment = "center"
 
     # Creacion de inputs para la matriz
-    def create_inputs(colums, rows, limt=26):
-        for i in range(1, limt):
+    def create_inputs(colums, rows, count=26, limt=5):
+
+        for i in range(1, count):
             colums += 1
             coo = ft.TextField(
                 border=ft.InputBorder.NONE,
@@ -49,6 +50,7 @@ def main(page: ft.Page):
                 text_size=12,
                 text_align=ft.TextAlign.CENTER,
                 hint_text=f"({rows}, {colums})",
+                # hint_text=f"({colums})",
                 hint_style=ft.TextStyle(
                     size=10,
                     color=ft.colors.GREY),
@@ -58,31 +60,37 @@ def main(page: ft.Page):
                 bgcolor=ft.colors.WHITE,
             )
             coos.append(coo)
-            if colums == 5:
+            if colums >= limt:
                 rows += 1
                 colums = 0
 
         return coos
 
-    # Creacion de la matriz con los inputs
+    # Creacion de la matriz con los inputs y sus respectivas coordenadas
     def items(count):
 
-        # in_size_op = input_size_matriz.value
-        # in_size_det = input_size_matriz_2.value
+        in_size_op = input_size_matriz.value
+        in_size_det = input_size_matriz_2.value
 
-        # if in_size_op is None and in_size_det is None:
-        #     limt = 26
-        # elif in_size_det is None:
-        #     limt = convert_size(in_size_op)+1
-        # elif in_size_op is None:
-        #     limt = convert_size(in_size_det)+1
+        if in_size_op is None and in_size_det is None:
+            count = 26
+            limt = 5
+        elif in_size_det is None or in_size_det == "":
+            count = convert_size(in_size_op) + 1
+            limt = int(in_size_op[4])
+            in_size_op = ""
+        elif in_size_op is None or in_size_op == "":
+            count = convert_size(in_size_det) + 1
+            limt = int(in_size_det[4])
+            in_size_det = ""
 
         items = []
-        for i in range(1, count + 1):
+        for i in range(1, count):
             items.append(
                 ft.Container(
-                    # content=create_inputs(colums, rows, limt=limt)[i-1],
-                    content=create_inputs(colums, rows)[i-1],
+                    content=create_inputs(
+                        colums, rows, count=count, limt=limt)[i-1],
+
                     alignment=ft.alignment.center,
                     width=55,
                     height=50,
@@ -384,8 +392,10 @@ def main(page: ft.Page):
     # Funcion para el acomodo de los inputs en una matriz de 5 x 5
     def return_matrix(itemss=25):
 
-        in_size_op = get_size(input_size_matriz.value)
-        in_size_det = get_size(input_size_matriz_2.value)
+        in_op = input_size_matriz.value
+        in_det = input_size_matriz_2.value
+        in_size_op = get_size(in_op)
+        in_size_det = get_size(in_det)
 
         if in_size_op is None and in_size_det is None:
             size = CINCO_X_CINCO
