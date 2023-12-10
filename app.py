@@ -33,8 +33,8 @@ def main(page: ft.Page):
     # Configuracion de la pagina
     page.title = "Matrix Calculator"
     page.theme_mode = ft.ThemeMode.LIGHT
-    page.window_height = 560
-    page.window_width = 1100
+    page.window_height = 570
+    page.window_width = 1170
     page.window_center()
     page.vertical_alignment = ft.MainAxisAlignment.CENTER
 
@@ -111,7 +111,7 @@ def main(page: ft.Page):
             row_botones.controls.clear()
             row_botones.controls.append(main_subject)
             row_botones.controls.append(ops_matrices)
-        elif subject == "Determinantes":
+        elif subject == "Determinantes (A)":
             row_botones.controls.clear()
             row_botones.controls.append(main_subject)
             row_botones.controls.append(ops_det)
@@ -169,20 +169,22 @@ def main(page: ft.Page):
                 row_botones.controls.append(main_subject)
                 row_botones.controls.append(ops_matrices)
                 row_botones.controls.append(size_matrices)
-                operation.content.value = " A^-1 "
+                operation.content.value = "A^-1"
                 operation.update()
                 matriz_b.content.controls.clear()
-                matriz_b.clean()
 
             input_size_matriz_2.value = None
 
-        elif subject == "Determinantes":
+        elif subject == "Determinantes (A)":
             sub_subject = input_subtema_det.value
             if sub_subject == "Método de cofactores" or sub_subject == "Método de expansión de Laplace":
                 row_botones.controls.clear()
                 row_botones.controls.append(main_subject)
                 row_botones.controls.append(ops_det)
                 row_botones.controls.append(size_matrices_2)
+                operation.content.value = "Det(A)"
+                operation.update()
+                matriz_b.content.controls.clear()
 
             input_size_matriz.value = None
 
@@ -207,7 +209,7 @@ def main(page: ft.Page):
             size_it = input_size_matriz.value
             itemss = convert_size(size_it)
 
-        elif subject == "Determinantes":
+        elif subject == "Determinantes (A)":
             sub_subject_2 = input_subtema_det.value
             size_it = input_size_matriz_2.value
             itemss = convert_size(size_it)
@@ -219,7 +221,9 @@ def main(page: ft.Page):
             matriz_a.content.controls.append(return_input("Escalar (k)"))
             matriz_b.content.controls.append(return_matrix(itemss))
         elif sub_subject_2 == "Inversión de matriz (A)":
-            print("Inversión de matriz (A)")
+            matriz_a.content.controls.append(return_matrix(itemss))
+            matriz_b.content.controls.clear()
+        elif sub_subject_2 == "Método de cofactores" or sub_subject_2 == "Método de expansión de Laplace":
             matriz_a.content.controls.append(return_matrix(itemss))
             matriz_b.content.controls.clear()
         else: 
@@ -266,7 +270,7 @@ def main(page: ft.Page):
         hint_style=ft.TextStyle(color=ft.colors.BLACK),
         options=[
             ft.dropdown.Option("Matrices"),
-            ft.dropdown.Option("Determinantes"),
+            ft.dropdown.Option("Determinantes (A)"),
             ft.dropdown.Option("Aplicaiones")
         ],
         autofocus=True
@@ -492,7 +496,15 @@ def main(page: ft.Page):
     )
 
     # Contenedor principal de la aplicacion
-    main_conteiner = ft.Container(ft.Column([botones, matrices]))
+    main_conteiner = ft.Container(ft.Column([
+        botones, 
+        matrices, 
+        ft.Row([
+            ft.Text("A", color=ft.colors.ORANGE, size=20), 
+            ft.Text("B", color=ft.colors.ORANGE, size=20),
+            ft.Text("Result", color=ft.colors.ORANGE, size=20)
+        ], alignment=ft.MainAxisAlignment.SPACE_AROUND)
+    ]))
 
     page.add(main_conteiner)
 
