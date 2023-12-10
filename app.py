@@ -31,34 +31,37 @@ def main(page: ft.Page):
     global coos, rows, colums, resultado
 
     # Configuracion de la pagina
-    page.window_center()
     page.title = "Matrix Calculator"
-    page.window_height = 600
-    page.window_width = 1060
-    page.vertical_alignment = "center"
-    page.horizontal_alignment = "center"
+    page.theme_mode = ft.ThemeMode.LIGHT
+    page.window_height = 560
+    page.window_width = 1100
+    page.window_center()
+    page.vertical_alignment = ft.MainAxisAlignment.CENTER
+
+    def return_input(hint):
+        user_input = ft.TextField(
+            border=ft.InputBorder.NONE,
+            max_length=3,
+            counter_style=ft.TextStyle(size=0),
+            text_size=12,
+            text_align=ft.TextAlign.CENTER,
+            hint_text=hint,
+            hint_style=ft.TextStyle(
+                size=10,
+                color=ft.colors.GREY),
+            filled=True,
+            width=80,
+            height=60,
+            bgcolor=ft.colors.WHITE
+        )
+        return user_input
 
     # Creacion de inputs para la matriz
     def create_inputs(colums, rows, count=26, limt=5):
 
         for i in range(1, count):
             colums += 1
-            coo = ft.TextField(
-                border=ft.InputBorder.NONE,
-                max_length=3,
-                counter_style=ft.TextStyle(size=0),
-                text_size=12,
-                text_align=ft.TextAlign.CENTER,
-                hint_text=f"({rows}, {colums})",
-                # hint_text=f"({colums})",
-                hint_style=ft.TextStyle(
-                    size=10,
-                    color=ft.colors.GREY),
-                filled=True,
-                width=55,
-                height=50,
-                bgcolor=ft.colors.WHITE,
-            )
+            coo = return_input(f"({rows}, {colums})")
             coos.append(coo)
             if colums >= limt:
                 rows += 1
@@ -130,26 +133,47 @@ def main(page: ft.Page):
                 row_botones.controls.append(main_subject)
                 row_botones.controls.append(ops_matrices)
                 row_botones.controls.append(size_matrices)
+                operation.content.value = " + "
+                operation.update()
+                matriz_a.content.controls.clear()
+                matriz_a.content.controls.append(return_matrix())
             elif sub_subject == "Resta":
                 row_botones.controls.clear()
                 row_botones.controls.append(main_subject)
                 row_botones.controls.append(ops_matrices)
                 row_botones.controls.append(size_matrices)
-            elif sub_subject == "Multiplicacion por un escalar":
+                operation.content.value = " - "
+                operation.update()
+                matriz_a.content.controls.clear()
+                matriz_a.content.controls.append(return_matrix())
+            elif sub_subject == "Multiplicación por un escalar":
                 row_botones.controls.clear()
                 row_botones.controls.append(main_subject)
                 row_botones.controls.append(ops_matrices)
                 row_botones.controls.append(size_matrices)
+                operation.content.value = " x "
+                operation.update()
+                matriz_a.content.controls.clear()
+                matriz_a.content.controls.append(return_input("Escalar (k)"))
             elif sub_subject == "Multiplicacion de matrices":
                 row_botones.controls.clear()
                 row_botones.controls.append(main_subject)
                 row_botones.controls.append(ops_matrices)
                 row_botones.controls.append(size_matrices)
-            elif sub_subject == "Inversión de matrices":
+                operation.content.value = " x "
+                operation.update()
+                matriz_a.content.controls.clear()
+                matriz_a.content.controls.append(return_matrix())
+            elif sub_subject == "Inversión de matriz (A)":
                 row_botones.controls.clear()
                 row_botones.controls.append(main_subject)
                 row_botones.controls.append(ops_matrices)
                 row_botones.controls.append(size_matrices)
+                operation.content.value = " A^-1 "
+                operation.update()
+                matriz_b.content.controls.clear()
+                matriz_b.clean()
+
             input_size_matriz_2.value = None
 
         elif subject == "Determinantes":
@@ -159,6 +183,7 @@ def main(page: ft.Page):
                 row_botones.controls.append(main_subject)
                 row_botones.controls.append(ops_det)
                 row_botones.controls.append(size_matrices_2)
+
             input_size_matriz.value = None
 
         elif subject == "Aplicaiones":
@@ -174,24 +199,33 @@ def main(page: ft.Page):
     # Funcion para el cambio de tamaño de la matriz
     def size_changed(e):
         subject = input_tema.value
-        # sub_subject_2 = ""
+        sub_subject_2 = ""
         size_it = ""
         itemss = 0
         if subject == "Matrices":
-            # sub_subject_2 = input_subtema_op.value
+            sub_subject_2 = input_subtema_op.value
             size_it = input_size_matriz.value
             itemss = convert_size(size_it)
 
         elif subject == "Determinantes":
-            # sub_subject_2 = input_subtema_det.value
+            sub_subject_2 = input_subtema_det.value
             size_it = input_size_matriz_2.value
             itemss = convert_size(size_it)
 
         matriz_a.content.controls.clear()
         matriz_b.content.controls.clear()
         coos.clear()
-        matriz_b.content.controls.append(return_matrix(itemss))
-        matriz_a.content.controls.append(return_matrix(itemss))
+        if sub_subject_2 == "Multiplicación por un escalar":
+            matriz_a.content.controls.append(return_input("Escalar (k)"))
+            matriz_b.content.controls.append(return_matrix(itemss))
+        elif sub_subject_2 == "Inversión de matriz (A)":
+            print("Inversión de matriz (A)")
+            matriz_a.content.controls.append(return_matrix(itemss))
+            matriz_b.content.controls.clear()
+        else: 
+            matriz_a.content.controls.append(return_matrix(itemss))
+            matriz_b.content.controls.append(return_matrix(itemss))
+
 
         page.update()
 
@@ -251,9 +285,9 @@ def main(page: ft.Page):
             ft.dropdown.Option("Suma"),
             ft.dropdown.Option("Resta"),
             ft.dropdown.Option(
-                "Multiplicacion por un escalar"),
+                "Multiplicación por un escalar"),
             ft.dropdown.Option("Multiplicacion de matrices"),
-            ft.dropdown.Option("Inversión de matrices")
+            ft.dropdown.Option("Inversión de matriz (A)")
         ],
         autofocus=True
     )
@@ -432,7 +466,7 @@ def main(page: ft.Page):
 
     # Operacion
     operation = ft.Container(
-        ft.Text(" + ")
+        content=ft.Text("  ", color=ft.colors.BLACK, size=30)
     )
 
     # Contenedor de las matrices
