@@ -1,6 +1,9 @@
 # Autor: Jorge Jusrez
 
 import flet as ft
+from funcionalidades_terminal.operaciones_matrices import *
+from determinantes_cifrado.cifradohill import *
+
 
 
 # Tamaño para las matrices
