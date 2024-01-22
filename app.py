@@ -1,9 +1,8 @@
 # Autor: Jorge Jusrez
-
 import flet as ft
 from funcionalidades_terminal.operaciones_matrices import *
 from determinantes_cifrado.cifradohill import *
-
+from re import sub
 
 
 # Tamaño para las matrices
@@ -28,6 +27,8 @@ resultado = """1  2  3  4  5
 16 17 18 19 20
 21 22 23 24 25"""
 
+# Mapeo de letras con numeros
+tabla = {'A': 0, 'B': 1, 'C': 2, 'D': 3, 'E': 4, 'F': 5, 'G': 6, 'H': 7, 'I': 8, 'J': 9, 'K': 10, 'L': 11, 'M': 12, 'N': 13, 'O': 14, 'P': 15, 'Q': 16, 'R': 17, 'S': 18, 'T': 19, 'U': 20, 'V': 21, 'W': 22, 'X': 23, 'Y': 24, 'Z': 25, ' ': 26, 'Ñ': 27}
 
 def main(page: ft.Page):
 
@@ -57,6 +58,24 @@ def main(page: ft.Page):
             height=60,
             bgcolor=ft.colors.WHITE
         )
+        return user_input
+    
+    # Input para las aplicaciones de Hill 
+    def return_input_ap(hint):
+        user_input = ft.TextField(
+            border=ft.InputBorder.NONE, 
+            max_length=100,
+            capitalization=ft.TextCapitalization.CHARACTERS,
+            multiline=True,
+            text_align=ft.TextAlign.CENTER,
+            hint_text=hint,
+            hint_style=ft.TextStyle(
+                 size=16,
+                 color=ft.colors.GREY
+            ),
+            filled=True,
+            bgcolor=ft.colors.ORANGE_50
+        )   
         return user_input
 
     # Creacion de inputs para la matriz
@@ -109,6 +128,7 @@ def main(page: ft.Page):
 
     # Funcion para la eleccion del tema
     def subject_changed(e):
+       
         subject = input_tema.value
         if subject == "Matrices":
             row_botones.controls.clear()
@@ -118,10 +138,15 @@ def main(page: ft.Page):
             row_botones.controls.clear()
             row_botones.controls.append(main_subject)
             row_botones.controls.append(ops_det)
-        elif subject == "Aplicaiones":
+        elif subject == "Aplicaciones":
             row_botones.controls.clear()
             row_botones.controls.append(main_subject)
-            row_botones.controls.append(aplications)
+            row_botones.controls.append(ops_aplications)
+            matriz_a.content.controls.clear()
+            matriz_b.content.controls.clear()
+            matriz_a.content.controls.append(return_input_ap("Ingresa la palabra o la oración a encriptar"))
+            matriz_b.content.controls.append(return_tabla("Ingresa solamente letras \n no incluyas caracteres especiales.\n\n Matriz clave: \n[3, 3] \n[2, 5]"))
+            matriz_b.content.controls.append(ft.Text(tabla))
 
         page.update()
 
@@ -191,8 +216,21 @@ def main(page: ft.Page):
 
             input_size_matriz.value = None
 
-        elif subject == "Aplicaiones":
-            pass
+        elif subject == "Aplicaciones":
+            sub_subject = input_subtema_ap.value
+            if sub_subject == "Hill":
+                row_botones.controls.clear()
+                row_botones.controls.append(main_subject)
+                row_botones.controls.append(ops_aplications)
+                row_botones.controls.append(metodo_hill)
+                operation.content.value = "  "
+                operation.update()
+                matriz_a.content.controls.clear()
+                matriz_a.content.controls.append(return_input_ap("Ingresa la palabra o la oración a encriptar"))
+                matriz_b.content.controls.clear()
+                matriz_b.content.controls.append(return_tabla("Ingresa solamente letras \n no incluyas caracteres especiales.\n\n Matriz clave: \n[3, 3] \n[2, 5]"))
+
+            input_encry_hill.value = None
 
         page.update()
 
@@ -215,7 +253,7 @@ def main(page: ft.Page):
         elif subject == "Determinantes (A)":
             sub_subject_2 = input_subtema_det.value
             size_it = input_size_matriz_2.value
-            itemss = convert_size(size_it)
+            itemss = convert_size(size_it)            
 
         matriz_a.content.controls.clear()
         matriz_b.content.controls.clear()
@@ -235,6 +273,26 @@ def main(page: ft.Page):
 
 
         page.update()
+
+    # Función para el cambio de aplicacion de Hill 
+    def app_hill(e):
+        subject = input_tema.value
+        sub_subject_2 = ""
+        if subject == "Aplicaciones":
+            sub_subject_2 = input_subtema_ap.value
+
+        matriz_a.content.controls.clear()
+        matriz_b.content.controls.clear()
+        coos.clear()
+
+        if sub_subject_2 == "Hill":
+            matriz_a.content.controls.append(return_input_ap("Ingresa la palabra o la oración a encriptar"))
+            matriz_b.content.controls.clear()
+            matriz_b.content.controls.append(return_tabla("Ingresa solamente letras \n no incluyas caracteres especiales.\n\n Matriz clave: [[3, 3], \n[2, 5]]"))
+
+        
+        page.update()
+
 
     # Funcion para obtener el tamaño de la matriz
     def get_size(size_in) -> int:
@@ -260,7 +318,7 @@ def main(page: ft.Page):
             return CINCO_X_CINCO
         else:
             return None
-
+                 
     # Boton para la eleccion de tema
     input_tema = ft.Dropdown(
         on_change=subject_changed,
@@ -274,7 +332,7 @@ def main(page: ft.Page):
         options=[
             ft.dropdown.Option("Matrices"),
             ft.dropdown.Option("Determinantes (A)"),
-            ft.dropdown.Option("Aplicaiones")
+            ft.dropdown.Option("Aplicaciones")
         ],
         autofocus=True
     )
@@ -291,8 +349,7 @@ def main(page: ft.Page):
         options=[
             ft.dropdown.Option("Suma"),
             ft.dropdown.Option("Resta"),
-            ft.dropdown.Option(
-                "Multiplicación por un escalar"),
+            ft.dropdown.Option("Multiplicación por un escalar"),
             ft.dropdown.Option("Multiplicacion de matrices"),
             ft.dropdown.Option("Inversión de matriz (A)")
         ],
@@ -317,13 +374,17 @@ def main(page: ft.Page):
 
     # Boton selecionado para la aplicacion de criptografia de hill
     input_subtema_ap = ft.Dropdown(
+        on_change=sub_subject_changed,
         text_size=13,
         width=220,
         height=50,
-        label="Criptografía de Hill",
-        label_style=ft.TextStyle(color=ft.colors.BLACK),
-        border=ft.InputBorder.NONE,
-        disabled=True
+        label="subtema",
+        hint_text="Elige un subtema",
+        hint_style=ft.TextStyle(color=ft.colors.BLACK),
+        options=[
+            ft.dropdown.Option("Hill")
+        ],
+        autofocus=True
     )
 
     # Boton para la eleccion de tamaño de matrices
@@ -370,6 +431,25 @@ def main(page: ft.Page):
         autofocus=True
     )
 
+    
+    # Botón para la eleccion de la aplicacion 
+    input_encry_hill = ft.Dropdown(
+        #on_change=app_hill,
+        text_size=13,
+        width=220,
+        height=50,
+        bgcolor="#FFDEA5",
+        label="Metodo de cifrado",
+        hint_text="Elige que metodo se realizara",
+        hint_style=ft.TextStyle(color=ft.colors.BLACK),
+        
+        options=[
+            ft.dropdown.Option("Encriptación de Hill"),
+            ft.dropdown.Option("Desencriptación de Hill")
+        ],
+        autofocus=True
+    )
+  
     # Contenedor del boton para la seleccion del tema
     main_subject = ft.Container(
         input_tema,
@@ -398,7 +478,7 @@ def main(page: ft.Page):
     )
 
     # Contenedor del boton para la seleccion de la aplicacion
-    aplications = ft.Container(
+    ops_aplications = ft.Container(
         input_subtema_ap,
         ft.TextStyle(color=ft.colors.BLACK),
         bgcolor="#FFA132",
@@ -422,6 +502,14 @@ def main(page: ft.Page):
         padding=5,
     )
 
+    # Contenedor del boton para la seleciion del metodo de Hill
+    metodo_hill = ft.Container(
+        input_encry_hill, 
+        ft.TextStyle(color=ft.colors.BLACK),
+        bgcolor="#FFDEA5",
+        padding=5,
+    )
+    
     # Fila de botones (tema, subtema, tamaño de matrices)
     row_botones = ft.Row(
         [main_subject]
@@ -430,6 +518,28 @@ def main(page: ft.Page):
     # Contenedor de los botones (tema, subtema, tamaño de matrices)
     botones = ft.Container(row_botones)
 
+    # Función para imprimir la matriz clave y la tabla
+    # def imprimir_tabla(tabla):
+    #     for clave, valor in tabla.items():
+    #         print(f'{clave}: {valor}')
+    # tabla = {'A': 0, 'B': 1, 'C': 2, 'D': 3, 'E': 4, 'F': 5, 'G': 6, 'H': 7, 'I': 8, 'J': 9, 'K': 10, 'L': 11, 'M': 12, 'N': 13, 'O': 14, 'P': 15, 'Q': 16, 'R': 17, 'S': 18, 'T': 19, 'U': 20, 'V': 21, 'W': 22, 'X': 23, 'Y': 24, 'Z': 25, ' ': 26, 'Ñ': 27}
+    # imprimir_tabla(tabla)
+
+    def return_tabla(hint):
+        user_input = ft.TextField(
+            border=ft.InputBorder.NONE,
+            capitalization=ft.TextCapitalization.CHARACTERS,
+            multiline=True,
+            text_align=ft.TextAlign.CENTER,
+            hint_text=hint,
+            hint_style=ft.TextStyle(
+                 size=16,
+                 color=ft.colors.BLACK87
+            ),
+            disabled=True,
+        )   
+        return user_input
+    
     # Funcion para el acomodo de los inputs en una matriz de 5 x 5
     def return_matrix(itemss=25):
 
@@ -458,7 +568,7 @@ def main(page: ft.Page):
     # Matriz A
     matriz_a = ft.Container(
         content=return_matrix(),
-        bgcolor="#FFDEA5",
+        bgcolor="#CDAF8E",
         padding=10,
         border_radius=ft.border_radius.all(5),
     )
@@ -471,10 +581,20 @@ def main(page: ft.Page):
         border_radius=ft.border_radius.all(5),
     )
 
+    # # Nuevo contenedor 
+    # contenedorHill = ft.Container(
+    #     bgcolor="#FFDEA5",
+    #     padding=10,
+    #     border_radius=ft.border_radius.all(5),
+    # )
+    
     # Operacion
     operation = ft.Container(
         content=ft.Text("  ", color=ft.colors.BLACK, size=30)
     )
+
+    def on_column_scroll(e: ft.OnScrollEvent):
+        pass 
 
     # Contenedor de las matrices
     matrices = ft.Container(
@@ -484,17 +604,30 @@ def main(page: ft.Page):
                 operation,
                 matriz_b,  # Matriz B
                 ft.Text(" = "),
-                ft.Container(
-                    content=ft.Text(
-                        resultado,
-                        color=ft.colors.WHITE
+                    ft.Container(
+                    content=ft.Column(
+                       [
+                           ft.Text(
+                            resultado,
+                            color=ft.colors.WHITE
+                            ),
+                            ft.Text(
+                                "\n" * 50,  # Agrega líneas en blanco al final
+                                color=ft.colors.WHITE
+                            )
+                       ], 
+                        spacing=10,
+                        height=200,
+                        width=200,
+                        scroll=ft.ScrollMode.ALWAYS,
+                        on_scroll=on_column_scroll
                     ),
                     bgcolor="#FFDEA5",
                     width=310,
                     height=310,
                     border_radius=ft.border_radius.all(5)
-                )
-            ]
+                )                      
+            ] 
         )
     )
 
