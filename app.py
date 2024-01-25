@@ -28,7 +28,7 @@ resultado = """1  2  3  4  5
 21 22 23 24 25"""
 
 # Mapeo de letras con numeros
-tabla = {'A': 0, 'B': 1, 'C': 2, 'D': 3, 'E': 4, 'F': 5, 'G': 6, 'H': 7, 'I': 8, 'J': 9, 'K': 10, 'L': 11, 'M': 12, 'N': 13, 'O': 14, 'P': 15, 'Q': 16, 'R': 17, 'S': 18, 'T': 19, 'U': 20, 'V': 21, 'W': 22, 'X': 23, 'Y': 24, 'Z': 25, ' ': 26, 'Ñ': 27}
+tabla = "\nTABLA DE EQUIVALENCIAS: \nA = 0 B = 1 C = 2 D = 3 E = 4 \nF = 5 G = 6 H = 7 I = 8 \nJ = 9 K = 10 L = 11 M = 12 \nN = 13 O = 14 P = 15 Q = 16 \nR = 17 S = 18 T = 19 U = 20 \nV = 21 W = 22 X = 23 Y = 24 \nZ = 25 ' '(espacio) = 26 Ñ = 27"
 
 def main(page: ft.Page):
 
@@ -60,7 +60,7 @@ def main(page: ft.Page):
         )
         return user_input
     
-    # Input para las aplicaciones de Hill 
+    # Input para las Aplicaciones de Hill de Hill 
     def return_input_ap(hint):
         user_input = ft.TextField(
             border=ft.InputBorder.NONE, 
@@ -134,19 +134,33 @@ def main(page: ft.Page):
             row_botones.controls.clear()
             row_botones.controls.append(main_subject)
             row_botones.controls.append(ops_matrices)
+            operation.content.value = " "
+            operation.update()
+            matriz_a.content.controls.clear()
+            matriz_a.content.controls.append(return_matrix())
+            matriz_b.content.controls.clear()
+            matriz_b.content.controls.append(return_matrix())
         elif subject == "Determinantes (A)":
             row_botones.controls.clear()
             row_botones.controls.append(main_subject)
             row_botones.controls.append(ops_det)
-        elif subject == "Aplicaciones":
+            operation.content.value = " "
+            operation.update()
+            matriz_a.content.controls.clear()
+            matriz_a.content.controls.append(return_matrix())
+            matriz_b.content.controls.clear()
+            matriz_b.content.controls.append(return_matrix())
+        elif subject == "Aplicaciones de Hill":
             row_botones.controls.clear()
             row_botones.controls.append(main_subject)
             row_botones.controls.append(ops_aplications)
+            operation.content.value = " "
+            operation.update()
             matriz_a.content.controls.clear()
             matriz_b.content.controls.clear()
-            matriz_a.content.controls.append(return_input_ap("Ingresa la palabra o la oración a encriptar"))
-            matriz_b.content.controls.append(return_tabla("Ingresa solamente letras \n no incluyas caracteres especiales.\n\n Matriz clave: \n[3, 3] \n[2, 5]"))
-            matriz_b.content.controls.append(ft.Text(tabla))
+            matriz_a.content.controls.append(return_input_ap("Ingreso letras"))
+            matriz_b.content.controls.append(ft.Text("Matriz clave: \n[3, 3] \n[2, 5]", color=ft.colors.BLACK, weight=ft.FontWeight.BOLD, italic=True, text_align=ft.TextAlign.CENTER))
+            matriz_b.content.controls.append(ft.Text(tabla, color=ft.colors.BLACK, weight=ft.FontWeight.BOLD, italic=True, text_align=ft.TextAlign.CENTER))
 
         page.update()
 
@@ -165,6 +179,10 @@ def main(page: ft.Page):
                 operation.update()
                 matriz_a.content.controls.clear()
                 matriz_a.content.controls.append(return_matrix())
+                matriz_b.content.controls.clear()
+                matriz_b.content.controls.append(return_matrix())
+                # Botón
+                resolver_botón.content = ft.ElevatedButton("Sumar Matrices")
             elif sub_subject == "Resta":
                 row_botones.controls.clear()
                 row_botones.controls.append(main_subject)
@@ -174,6 +192,10 @@ def main(page: ft.Page):
                 operation.update()
                 matriz_a.content.controls.clear()
                 matriz_a.content.controls.append(return_matrix())
+                matriz_b.content.controls.clear()
+                matriz_b.content.controls.append(return_matrix())
+                # Botón 
+                resolver_botón.content = ft.ElevatedButton("Restar Matrices")
             elif sub_subject == "Multiplicación por un escalar":
                 row_botones.controls.clear()
                 row_botones.controls.append(main_subject)
@@ -183,6 +205,8 @@ def main(page: ft.Page):
                 operation.update()
                 matriz_a.content.controls.clear()
                 matriz_a.content.controls.append(return_input("Escalar (k)"))
+                # Botón 
+                resolver_botón.content = ft.ElevatedButton("Multiplicar por un escalar")
             elif sub_subject == "Multiplicacion de matrices":
                 row_botones.controls.clear()
                 row_botones.controls.append(main_subject)
@@ -192,6 +216,10 @@ def main(page: ft.Page):
                 operation.update()
                 matriz_a.content.controls.clear()
                 matriz_a.content.controls.append(return_matrix())
+                matriz_b.content.controls.clear()
+                matriz_b.content.controls.append(return_matrix())
+                # Botón
+                resolver_botón.content = ft.ElevatedButton("Multiplicar Matrices")
             elif sub_subject == "Inversión de matriz (A)":
                 row_botones.controls.clear()
                 row_botones.controls.append(main_subject)
@@ -200,12 +228,13 @@ def main(page: ft.Page):
                 operation.content.value = "A^-1"
                 operation.update()
                 matriz_b.content.controls.clear()
+                resolver_botón.content = ft.ElevatedButton("Invertir Matriz A")
 
             input_size_matriz_2.value = None
 
         elif subject == "Determinantes (A)":
             sub_subject = input_subtema_det.value
-            if sub_subject == "Método de cofactores" or sub_subject == "Método de expansión de Laplace":
+            if sub_subject == "Método de cofactores":
                 row_botones.controls.clear()
                 row_botones.controls.append(main_subject)
                 row_botones.controls.append(ops_det)
@@ -216,21 +245,35 @@ def main(page: ft.Page):
 
             input_size_matriz.value = None
 
-        elif subject == "Aplicaciones":
+        elif subject == "Aplicaciones de Hill":
             sub_subject = input_subtema_ap.value
-            if sub_subject == "Hill":
+            encriptar =  None
+            if sub_subject == "Encriptación de Hill":
                 row_botones.controls.clear()
                 row_botones.controls.append(main_subject)
                 row_botones.controls.append(ops_aplications)
-                row_botones.controls.append(metodo_hill)
-                operation.content.value = "  "
+                operation.content.value = " "
                 operation.update()
                 matriz_a.content.controls.clear()
                 matriz_a.content.controls.append(return_input_ap("Ingresa la palabra o la oración a encriptar"))
                 matriz_b.content.controls.clear()
-                matriz_b.content.controls.append(return_tabla("Ingresa solamente letras \n no incluyas caracteres especiales.\n\n Matriz clave: \n[3, 3] \n[2, 5]"))
-
-            input_encry_hill.value = None
+                matriz_b.content.controls.append(ft.Text("Matriz clave: \n[3, 3] \n[2, 5]", color=ft.colors.BLACK, weight=ft.FontWeight.BOLD, italic=True, text_align=ft.TextAlign.CENTER))
+                matriz_b.content.controls.append(ft.Text(tabla, color=ft.colors.BLACK, weight=ft.FontWeight.BOLD, italic=True, text_align=ft.TextAlign.CENTER))
+                #botón 
+                resolver_botón.content = ft.ElevatedButton("Encriptar")
+            elif sub_subject == "Desencriptación de Hill": 
+                row_botones.controls.clear()
+                row_botones.controls.append(main_subject)
+                row_botones.controls.append(ops_aplications)
+                operation.content.value = " "
+                operation.update()
+                matriz_a.content.controls.clear()
+                matriz_a.content.controls.append(return_input_ap("Ingresa el código"))
+                matriz_b.content.controls.clear()
+                matriz_b.content.controls.append(ft.Text("Matriz clave: \n[3, 3] \n[2, 5]", color=ft.colors.BLACK, weight=ft.FontWeight.BOLD, italic=True, text_align=ft.TextAlign.CENTER))
+                matriz_b.content.controls.append(ft.Text(tabla, color=ft.colors.BLACK, weight=ft.FontWeight.BOLD, italic=True, text_align=ft.TextAlign.CENTER))
+                # botón 
+                resolver_botón.content = ft.ElevatedButton("Desencriptar")
 
         page.update()
 
@@ -264,7 +307,7 @@ def main(page: ft.Page):
         elif sub_subject_2 == "Inversión de matriz (A)":
             matriz_a.content.controls.append(return_matrix(itemss))
             matriz_b.content.controls.clear()
-        elif sub_subject_2 == "Método de cofactores" or sub_subject_2 == "Método de expansión de Laplace":
+        elif sub_subject_2 == "Método de cofactores":
             matriz_a.content.controls.append(return_matrix(itemss))
             matriz_b.content.controls.clear()
         else: 
@@ -273,26 +316,6 @@ def main(page: ft.Page):
 
 
         page.update()
-
-    # Función para el cambio de aplicacion de Hill 
-    def app_hill(e):
-        subject = input_tema.value
-        sub_subject_2 = ""
-        if subject == "Aplicaciones":
-            sub_subject_2 = input_subtema_ap.value
-
-        matriz_a.content.controls.clear()
-        matriz_b.content.controls.clear()
-        coos.clear()
-
-        if sub_subject_2 == "Hill":
-            matriz_a.content.controls.append(return_input_ap("Ingresa la palabra o la oración a encriptar"))
-            matriz_b.content.controls.clear()
-            matriz_b.content.controls.append(return_tabla("Ingresa solamente letras \n no incluyas caracteres especiales.\n\n Matriz clave: [[3, 3], \n[2, 5]]"))
-
-        
-        page.update()
-
 
     # Funcion para obtener el tamaño de la matriz
     def get_size(size_in) -> int:
@@ -332,7 +355,7 @@ def main(page: ft.Page):
         options=[
             ft.dropdown.Option("Matrices"),
             ft.dropdown.Option("Determinantes (A)"),
-            ft.dropdown.Option("Aplicaciones")
+            ft.dropdown.Option("Aplicaciones de Hill")
         ],
         autofocus=True
     )
@@ -366,8 +389,7 @@ def main(page: ft.Page):
         hint_text="Elige un subtema",
         hint_style=ft.TextStyle(color=ft.colors.BLACK),
         options=[
-            ft.dropdown.Option("Método de cofactores"),
-            ft.dropdown.Option("Método de expansión de Laplace")
+            ft.dropdown.Option("Método de cofactores")
         ],
         autofocus=True
     )
@@ -382,7 +404,8 @@ def main(page: ft.Page):
         hint_text="Elige un subtema",
         hint_style=ft.TextStyle(color=ft.colors.BLACK),
         options=[
-            ft.dropdown.Option("Hill")
+            ft.dropdown.Option("Encriptación de Hill"),
+            ft.dropdown.Option("Desencriptación de Hill")
         ],
         autofocus=True
     )
@@ -431,25 +454,7 @@ def main(page: ft.Page):
         autofocus=True
     )
 
-    
-    # Botón para la eleccion de la aplicacion 
-    input_encry_hill = ft.Dropdown(
-        #on_change=app_hill,
-        text_size=13,
-        width=220,
-        height=50,
-        bgcolor="#FFDEA5",
-        label="Metodo de cifrado",
-        hint_text="Elige que metodo se realizara",
-        hint_style=ft.TextStyle(color=ft.colors.BLACK),
-        
-        options=[
-            ft.dropdown.Option("Encriptación de Hill"),
-            ft.dropdown.Option("Desencriptación de Hill")
-        ],
-        autofocus=True
-    )
-  
+     
     # Contenedor del boton para la seleccion del tema
     main_subject = ft.Container(
         input_tema,
@@ -481,7 +486,7 @@ def main(page: ft.Page):
     ops_aplications = ft.Container(
         input_subtema_ap,
         ft.TextStyle(color=ft.colors.BLACK),
-        bgcolor="#FFA132",
+        bgcolor="#FBC364",
         padding=5,
         border_radius=ft.border_radius.all(5)
     )
@@ -490,7 +495,7 @@ def main(page: ft.Page):
     size_matrices = ft.Container(
         input_size_matriz,
         ft.TextStyle(color=ft.colors.BLACK),
-        bgcolor="#FFDEA5",
+        bgcolor="#FBC364",
         padding=5,
     )
 
@@ -498,15 +503,7 @@ def main(page: ft.Page):
     size_matrices_2 = ft.Container(
         input_size_matriz_2,
         ft.TextStyle(color=ft.colors.BLACK),
-        bgcolor="#FFDEA5",
-        padding=5,
-    )
-
-    # Contenedor del boton para la seleciion del metodo de Hill
-    metodo_hill = ft.Container(
-        input_encry_hill, 
-        ft.TextStyle(color=ft.colors.BLACK),
-        bgcolor="#FFDEA5",
+        bgcolor="#FBC364",
         padding=5,
     )
     
@@ -517,13 +514,6 @@ def main(page: ft.Page):
 
     # Contenedor de los botones (tema, subtema, tamaño de matrices)
     botones = ft.Container(row_botones)
-
-    # Función para imprimir la matriz clave y la tabla
-    # def imprimir_tabla(tabla):
-    #     for clave, valor in tabla.items():
-    #         print(f'{clave}: {valor}')
-    # tabla = {'A': 0, 'B': 1, 'C': 2, 'D': 3, 'E': 4, 'F': 5, 'G': 6, 'H': 7, 'I': 8, 'J': 9, 'K': 10, 'L': 11, 'M': 12, 'N': 13, 'O': 14, 'P': 15, 'Q': 16, 'R': 17, 'S': 18, 'T': 19, 'U': 20, 'V': 21, 'W': 22, 'X': 23, 'Y': 24, 'Z': 25, ' ': 26, 'Ñ': 27}
-    # imprimir_tabla(tabla)
 
     def return_tabla(hint):
         user_input = ft.TextField(
@@ -568,7 +558,7 @@ def main(page: ft.Page):
     # Matriz A
     matriz_a = ft.Container(
         content=return_matrix(),
-        bgcolor="#CDAF8E",
+        bgcolor="#FFDEA5",
         padding=10,
         border_radius=ft.border_radius.all(5),
     )
@@ -581,13 +571,6 @@ def main(page: ft.Page):
         border_radius=ft.border_radius.all(5),
     )
 
-    # # Nuevo contenedor 
-    # contenedorHill = ft.Container(
-    #     bgcolor="#FFDEA5",
-    #     padding=10,
-    #     border_radius=ft.border_radius.all(5),
-    # )
-    
     # Operacion
     operation = ft.Container(
         content=ft.Text("  ", color=ft.colors.BLACK, size=30)
@@ -595,7 +578,13 @@ def main(page: ft.Page):
 
     def on_column_scroll(e: ft.OnScrollEvent):
         pass 
-
+    
+    # Contenedor de botón calcular 
+    resolver_botón = ft.Container(
+        bgcolor="#FFA74A",
+        padding=10,
+        border_radius=ft.border_radius.all(5),
+    )
     # Contenedor de las matrices
     matrices = ft.Container(
         ft.Row(
@@ -622,7 +611,7 @@ def main(page: ft.Page):
                         scroll=ft.ScrollMode.ALWAYS,
                         on_scroll=on_column_scroll
                     ),
-                    bgcolor="#FFDEA5",
+                    bgcolor="#F7C56F",
                     width=310,
                     height=310,
                     border_radius=ft.border_radius.all(5)
@@ -632,14 +621,16 @@ def main(page: ft.Page):
     )
 
     # Contenedor principal de la aplicacion
-    main_conteiner = ft.Container(ft.Column([
+    main_conteiner = ft.Container(
+        ft.Column([
         botones, 
         matrices, 
         ft.Row([
             ft.Text("A", color=ft.colors.ORANGE, size=20), 
             ft.Text("B", color=ft.colors.ORANGE, size=20),
             ft.Text("Result", color=ft.colors.ORANGE, size=20)
-        ], alignment=ft.MainAxisAlignment.SPACE_AROUND)
+        ], alignment=ft.MainAxisAlignment.SPACE_AROUND),
+        ft.Row([resolver_botón],  alignment=ft.MainAxisAlignment.CENTER)
     ]))
 
     page.add(main_conteiner)
@@ -653,6 +644,5 @@ def main(page: ft.Page):
 
 # Ejecucion en aplicacion de escritorio
 ft.app(target=main)
-
 # Ejecucion en local host ( navegador web )
 # ft.app(target=main, view=ft.AppView.WEB_BROWSER)
