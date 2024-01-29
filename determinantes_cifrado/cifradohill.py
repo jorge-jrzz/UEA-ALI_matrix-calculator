@@ -34,16 +34,16 @@ def desencriptar_mensaje(clave, clave_inversa, mensaje_cifrado):
 
     return letras
 
-def imprimirEncriptacion(clave): 
-    mensaje_original = input("Ingresa la palabra o frase que deseas encriptar: ")
-    mensaje_encriptado = encriptar_mensaje(clave, mensaje_original)
-    print(f"La palabra o frase encriptada es: {mensaje_encriptado}")
+# def imprimirEncriptacion(clave): 
+#     mensaje_original = input("Ingresa la palabra o frase que deseas encriptar: ")
+#     mensaje_encriptado = encriptar_mensaje(clave, mensaje_original)
+#     print(f"La palabra o frase encriptada es: {mensaje_encriptado}")
 
-def imprimirDesencriptacion(clave, clave_inversa):
-    mensaje_cifrado = input("Ingresa el mensaje cifrado que deseas desencriptar: ")
-    mensaje_desencriptado = desencriptar_mensaje(clave, clave_inversa, mensaje_cifrado)
-    print(f"La palabra o frase desencriptada es: {mensaje_desencriptado}")
+# def imprimirDesencriptacion(clave, clave_inversa):
+#     mensaje_cifrado = input("Ingresa el mensaje cifrado que deseas desencriptar: ")
+#     mensaje_desencriptado = desencriptar_mensaje(clave, clave_inversa, mensaje_cifrado)
+#     print(f"La palabra o frase desencriptada es: {mensaje_desencriptado}")
 
-imprimirEncriptacion(clave)
+# imprimirEncriptacion(clave)
 
-imprimirDesencriptacion(clave, clave_inversa)
+# imprimirDesencriptacion(clave, clave_inversa)}

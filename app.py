@@ -1,8 +1,11 @@
-# Autor: Jorge Jusrez
+# Autores: Jorge Juarez, Iván Garrido Velázquez, Casandra Zetina Rodríguez
 import flet as ft
-#from funcionalidades_terminal.operaciones_matrices import *
-#from determinantes_cifrado.cifradohill import *
+from determinantes_cifrado.cifradohill import *
+import numpy as np
+from sympy import Matrix
 from re import sub
+
+
 
 
 # Tamaño para las matrices
@@ -17,23 +20,24 @@ TRES_X_CUATRO = 280
 DOS_X_CUATRO = 280
 CINCO_X_CINCO = 320
 
+#Matriz clave
+clave = np.array([[3, 3], [2, 5]])
+
+#Inversa de la matriz clave
+clave_inversa = np.array(Matrix(clave).inv_mod(28))
+
 # Lista de inputs para la matriz
 coos = []
 rows = 1
 colums = 0
-resultado = """1  2  3  4  5
-6  7  8  9  10
-11 12 13 14 15
-16 17 18 19 20
-21 22 23 24 25"""
+#resultado = ("1  2  3  4  5\n6  7  8  9  10\n11 12 13 14 15\n16 17 18 19 20\n21 22 23 24 25")
 
 # Mapeo de letras con numeros
 tabla = "\nTABLA DE EQUIVALENCIAS: \nA = 0 B = 1 C = 2 D = 3 E = 4 \nF = 5 G = 6 H = 7 I = 8 \nJ = 9 K = 10 L = 11 M = 12 \nN = 13 O = 14 P = 15 Q = 16 \nR = 17 S = 18 T = 19 U = 20 \nV = 21 W = 22 X = 23 Y = 24 \nZ = 25 ' '(espacio) = 26 Ñ = 27"
 
 def main(page: ft.Page):
-
-    global coos, rows, colums, resultado
-
+    
+    global coos, rows, colums
     # Configuracion de la pagina
     page.title = "Matrix Calculator"
     page.theme_mode = ft.ThemeMode.LIGHT
@@ -76,8 +80,53 @@ def main(page: ft.Page):
             filled=True,
             bgcolor=ft.colors.ORANGE_50
         )   
-        return user_input
+        return user_input #user_input.value 
+    
 
+
+
+    # Funcion para almacenar los inputs de hill
+    def return_input_encrip(hint):
+        user_input = ft.TextField(
+            border=ft.InputBorder.NONE, 
+            max_length=100,
+            capitalization=ft.TextCapitalization.CHARACTERS,
+            multiline=True,
+            text_align=ft.TextAlign.CENTER,
+            hint_text=hint,
+            hint_style=ft.TextStyle(
+                 size=16,
+                 color=ft.colors.GREY
+            ),
+            filled=True,
+            bgcolor=ft.colors.ORANGE_50,
+            read_only=True
+        )
+        return user_input
+    # Botones 
+    
+    #clave, clave_inversa, entrada_mensaje.value
+    # Funcion paa encriptar el mensaje 
+
+    #resultado
+    resultado = ft.TextField(
+        border=ft.InputBorder.NONE, 
+        max_length=100,
+        capitalization=ft.TextCapitalization.CHARACTERS,
+        multiline=True,
+        text_align=ft.TextAlign.CENTER,
+        hint_text="",
+        hint_style=ft.TextStyle(
+            size=16,
+            color=ft.colors.GREY
+        ),
+        filled=False, 
+        bgcolor=ft.colors.ORANGE_50,
+        read_only = True # impide que el simio del usuario escriba
+       
+    )
+
+   
     # Creacion de inputs para la matriz
     def create_inputs(colums, rows, count=26, limt=5):
 
@@ -164,6 +213,29 @@ def main(page: ft.Page):
 
         page.update()
 
+    entrada_mensaje = ft.TextField(
+        border=ft.InputBorder.NONE, 
+        max_length=100,
+        capitalization=ft.TextCapitalization.CHARACTERS,
+        multiline=True,
+        text_align=ft.TextAlign.CENTER,
+        hint_text="",
+        hint_style=ft.TextStyle(
+            size=16,
+            color=ft.colors.GREY
+        ),
+        filled=True,
+        bgcolor=ft.colors.ORANGE_50
+    )
+    # global entrada_mensaje
+    # entrada_mensaje = return_input_encrip("")
+    # def encriptar(e):
+    #     global entrada_mensaje
+    #     mensaje = entrada_mensaje.value
+    #     resultado_encriptado = encriptar_mensaje(clave, mensaje)
+    #     resultado.text = resultado_encriptado
+    #     print("Si ejecuta la función")
+    #     page.update()
     # Funcion para la eleccion del subtema
     def sub_subject_changed(e):
         subject = input_tema.value
@@ -248,7 +320,6 @@ def main(page: ft.Page):
 
         elif subject == "Aplicaciones de Hill":
             sub_subject = input_subtema_ap.value
-            encriptar =  None
             if sub_subject == "Encriptación de Hill":
                 row_botones.controls.clear()
                 row_botones.controls.append(main_subject)
@@ -256,12 +327,14 @@ def main(page: ft.Page):
                 operation.content.value = " "
                 operation.update()
                 matriz_a.content.controls.clear()
-                matriz_a.content.controls.append(return_input_ap("Ingresa la palabra o la oración a encriptar"))
+                entrada_mensaje.hint_text = "Ingresa la palabra o la oración a encriptar"
+                matriz_a.content.controls.append(entrada_mensaje)
+                # print (entrada_mensaje)
                 matriz_b.content.controls.clear()
                 matriz_b.content.controls.append(ft.Text("Matriz clave: \n[3, 3] \n[2, 5]", weight=ft.FontWeight.BOLD, italic=True, text_align=ft.TextAlign.CENTER))
                 matriz_b.content.controls.append(ft.Text(tabla, color=ft.colors.BLACK, weight=ft.FontWeight.BOLD, italic=True, text_align=ft.TextAlign.CENTER))
                 #botón 
-                resolver_botón.content = ft.ElevatedButton("Encriptar", bgcolor=ft.colors.ORANGE, color=ft.colors.BLACK)
+                resolver_botón.content = boton_encriptar
             elif sub_subject == "Desencriptación de Hill": 
                 row_botones.controls.clear()
                 row_botones.controls.append(main_subject)
@@ -269,15 +342,43 @@ def main(page: ft.Page):
                 operation.content.value = " "
                 operation.update()
                 matriz_a.content.controls.clear()
-                matriz_a.content.controls.append(return_input_ap("Ingresa el código"))
+                # matriz_a.content.controls.append(return_input_ap("Ingresa el código"))
+                entrada_mensaje.hint_text = "Ingresa el código"
+                matriz_a.content.controls.append(entrada_mensaje)
                 matriz_b.content.controls.clear()
                 matriz_b.content.controls.append(ft.Text("Matriz clave: \n[3, 3] \n[2, 5]", color=ft.colors.BLACK, weight=ft.FontWeight.BOLD, italic=True, text_align=ft.TextAlign.CENTER))
                 matriz_b.content.controls.append(ft.Text(tabla, color=ft.colors.BLACK, weight=ft.FontWeight.BOLD, italic=True, text_align=ft.TextAlign.CENTER))
                 # botón 
-                resolver_botón.content = ft.ElevatedButton("Desencriptar", bgcolor=ft.colors.ORANGE, color=ft.colors.BLACK)
+                # resolver_botón.content = ft.ElevatedButton("Desencriptar", bgcolor=ft.colors.ORANGE, color=ft.colors.BLACK)
+                resolver_botón.content = boton_desencriptar
 
         page.update()
 
+
+
+
+    # Funciones para el cifrado de hill
+
+    def encriptar(e):
+        mensaje = entrada_mensaje.value
+        # print (mensaje)
+        resultado.value = encriptar_mensaje(clave, mensaje)
+        # print("Si ejecuta la función")
+        resultado.text = resultado.value
+        # print(resultado)
+        page.update()
+
+    def desencriptar(e):
+        codigo = entrada_mensaje.value
+        resultado.value = desencriptar_mensaje(clave, clave_inversa, codigo)
+        # print("Si ejecuta la función DESENCRIPTAR")
+        resultado.text = resultado.value
+        # print(resultado)
+        page.update()
+    boton_encriptar = ft.ElevatedButton("Encriptar", bgcolor=ft.colors.ORANGE, color=ft.colors.BLACK, on_click=encriptar)
+    boton_desencriptar = ft.ElevatedButton("Desencriptar", bgcolor=ft.colors.ORANGE, color=ft.colors.BLACK, on_click=desencriptar)
+    
+   
     # Funcion para convertir el tamaño de la matriz en un numero
     def convert_size(matriz_size):
         size = matriz_size.split("x")
@@ -590,6 +691,7 @@ def main(page: ft.Page):
         border_radius=ft.border_radius.all(5),
     )
     # Contenedor de las matrices
+    # Contenedor de las matrices
     matrices = ft.Container(
         ft.Row(
             [
@@ -600,10 +702,8 @@ def main(page: ft.Page):
                     ft.Container(
                     content=ft.Column(
                        [
-                           ft.Text(
                             resultado,
-                            color=ft.colors.WHITE
-                            ),
+                            #color=ft.colors.WHITE
                             ft.Text(
                                 "\n" * 50,  # Agrega líneas en blanco al final
                                 color=ft.colors.WHITE
@@ -625,8 +725,10 @@ def main(page: ft.Page):
     )
     
     #Función para almacenar y devolver los outputs del usuario
-    def outputsUser():
-        print("Prueba")
+#    def outputsUser():
+#         global resultado
+#         resultado.text = desencriptar_mensaje(clave, clave_inversa, entrada_mensaje.value)
+#         page.update()
     # Contenedor principal de la aplicacion
     main_conteiner = ft.Container(
         ft.Column([
