@@ -4,9 +4,13 @@
 # + - +
 import numpy as np
 
+respuesta_final = ""
+
 def cofactor(matriz, fila, columna):
+    global respuesta_final
     submatriz = np.delete(np.delete(matriz, fila, axis=0), columna, axis=1)
     print(f"\nCalculando el cofactor para el elemento de la fila {fila + 1}, columna {columna + 1}:\n{submatriz}")
+    respuesta_final += f"\nCalculando el cofactor para el elemento de la fila {fila + 1}, comna {columna + 1}:\n{submatriz}"
 
     # Obtener los elementos de la submatriz para la explicación
     elementos_submatriz = submatriz.flatten()
@@ -14,12 +18,15 @@ def cofactor(matriz, fila, columna):
     # Mostrar la operación específica para calcular el cofactor
     operacion = f"{elementos_submatriz[0]} * {elementos_submatriz[3]} - {elementos_submatriz[1]} * {elementos_submatriz[2]}"
     print(f"Operación para el cofactor: {operacion}")
+    respuesta_final += f"Operación para el cofactor: {operacion}"
 
     cof = ((-1) ** (fila + columna)) * determinante(submatriz)
     print(f"Resultado del cofactor: {cof}")
+    respuesta_final += f"Resultado del cofactor: {cof}"
     return cof
 
 def determinante(matriz):
+    global respuesta_final
     size = len(matriz)
 
     if size == 1:
@@ -73,3 +80,4 @@ if __name__ == "__main__":
         print("\nCalculando el determinante usando el método de cofactores (laplace)...")
         resultado = determinante(matriz_usuario)
         print(f"\nDeterminante por cofactores: {resultado}")
+        print(respuesta_final)
