@@ -1,11 +1,9 @@
 # Autores: Jorge Juarez, Iván Garrido Velázquez, Casandra Zetina Rodríguez
 import flet as ft
 from determinantes_cifrado.cifradohill import *
+from funcionalidades_terminal.operaciones_matrices import *
 import numpy as np
 from sympy import Matrix
-from re import sub
-
-
 
 
 # Tamaño para las matrices
@@ -30,6 +28,8 @@ clave_inversa = np.array(Matrix(clave).inv_mod(28))
 coos = []
 rows = 1
 colums = 0
+textfields = []
+
 #resultado = ("1  2  3  4  5\n6  7  8  9  10\n11 12 13 14 15\n16 17 18 19 20\n21 22 23 24 25")
 
 # Mapeo de letras con numeros
@@ -251,10 +251,10 @@ def main(page: ft.Page):
                 operation.update()
                 matriz_a.content.controls.clear()
                 matriz_a.content.controls.append(return_matrix())
-                matriz_b.content.controls.clear()
-                matriz_b.content.controls.append(return_matrix())
+                # matriz_b.content.controls.clear()
+                # matriz_b.content.controls.append(return_matrix())
                 # Botón
-                resolver_botón.content = ft.ElevatedButton("Sumar Matrices", bgcolor=ft.colors.ORANGE, color=ft.colors.BLACK)
+                resolver_botón.content = boton_sumar
             elif sub_subject == "Resta":
                 row_botones.controls.clear()
                 row_botones.controls.append(main_subject)
@@ -354,8 +354,28 @@ def main(page: ft.Page):
 
         page.update()
 
+    # Funciones para las operaciones de matrices
+    # def sumar(e):
+    #     # matriz_a = 
+    #     # matriz_b =
+    #     # resultado.value = sumarMatrices(matriz_a, matriz_b)
+    #     # resultado.text = str(resultado.value)
+    #     # page.update
+    #     print("hola")
+    def sumar(e):
+        # Recoge las matrices del usuario.
+        matriz_a_values = get_matrix_values()
+        print ("Matriz a xd: ",matriz_a_values)
+        matriz_b_values = get_matrix_values()
+        print("Matriz a", matriz_a_values)
+        print("Matriz b: ", matriz_b_values)
+        # Realiza la operación de suma.
+        resultado_matriz = sumarMatrices(matriz_a_values, matriz_b_values)
+        # Convierte el resultado a una cadena de texto y actualiza el contenedor 'resultado'.
+        resultado.value = '\n'.join(' '.join(str(cell) for cell in row) for row in resultado_matriz)
+        page.update()
 
-
+    boton_sumar = ft.ElevatedButton("Sumar", bgcolor=ft.colors.ORANGE, color=ft.colors.BLACK, on_click=sumar)
 
     # Funciones para el cifrado de hill
 
@@ -636,6 +656,7 @@ def main(page: ft.Page):
         return user_input
     
     # Funcion para el acomodo de los inputs en una matriz de 5 x 5
+
     def return_matrix(itemss=25):
 
         in_op = input_size_matriz.value
@@ -659,6 +680,51 @@ def main(page: ft.Page):
         )
 
         return row
+
+
+    def get_matrix_values():  
+        # Recupera los valores de los campos de entrada y los almacena en una lista.
+        in_size_op = input_size_matriz.value
+        in_size_det = input_size_matriz_2.value
+        if in_size_op is None and in_size_det is None:
+            count = 26
+            limt = 5
+        elif in_size_det is None or in_size_det == "":
+            count = convert_size(in_size_op) + 1
+            limt = int(in_size_op[0])
+            in_size_op = ""
+        elif in_size_op is None or in_size_op == "":
+            count = convert_size(in_size_det) + 1
+            limt = int(in_size_det[0])
+            in_size_det = ""
+
+        coos = create_inputs(colums, rows, count=count, limt=limt)
+        matriz_values = [float(coo.value) for coo in coos if coo.value.strip() != '']
+        # Da forma a 'matriz_values' para que tenga la forma de la matriz original.
+        num_rows = count // limt
+        num_columns = limt
+        matriz_values = np.reshape(matriz_values, (num_rows, num_columns))
+        return matriz_values
+
+# def get_matrix_values(textfields):
+#     # Recupera los valores de los campos de entrada y los almacena en una lista.
+#     matriz_values = [float(textfield.value) for textfield in textfields if textfield.value.strip() != '']
+#     # Da forma a 'matriz_values' para que tenga la forma de la matriz original.
+#     num_rows = ...  # Aquí necesitas determinar el número de filas en tu matriz.
+#     num_columns = ...  # Aquí necesitas determinar el número de columnas en tu matriz.
+#     matriz_values = np.reshape(matriz_values, (num_rows, num_columns))
+#     return matriz_values
+
+# def sumar(e):
+#     # Recoge las matrices del usuario.
+#     matriz_a_values = get_matrix_values(textfields_a)
+#     matriz_b_values = get_matrix_values(textfields_b)
+#     # Realiza la operación de suma.
+#     resultado_matriz = np.add(matriz_a_values, matriz_b_values)
+#     # Convierte el resultado a una cadena de texto y actualiza el contenedor 'resultado'.
+#     resultado.value = '\n'.join(' '.join(str(cell) for cell in row) for row in resultado_matriz)
+#     page.update()
+
 
     # Matriz A
     matriz_a = ft.Container(
