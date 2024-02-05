@@ -65,7 +65,6 @@ Run teh program
 - [jorge-jrzz (Jorge Angel Juarez Vazquez)](https://github.com/jorge-jrzz)
 - [ivangv0505 (Iván Garrido V)](https://github.com/ivangv0505)
 - [Cas260208 (CasandraZrd26)](https://github.com/Cas260208)
-- [INGMETROMAN](https://github.com/INGMETROMAN)
 
 ## License
 
