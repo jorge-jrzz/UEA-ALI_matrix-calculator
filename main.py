@@ -1,10 +1,10 @@
 # Autores: Jorge Juarez, Iván Garrido Velázquez, Casandra Zetina Rodríguez
 import flet as ft
-from determinantes_cifrado.cifradohill import *
+from determinantes_cifrado import cofactores, cifradohill
 from funcionalidades_terminal.operaciones_matrices import *
 import numpy as np
 from sympy import Matrix
-from fractions import Fraction # Para que los resultados salgan en fracciones
+from fractions import Fraction  # Para que los resultados salgan en fracciones
 
 # Tamaño para las matrices
 DOS_X_DOS = 160
@@ -18,10 +18,10 @@ TRES_X_CUATRO = 280
 DOS_X_CUATRO = 280
 CINCO_X_CINCO = 320
 
-#Matriz clave
+# Matriz clave
 clave = np.array([[3, 3], [2, 5]])
 
-#Inversa de la matriz clave
+# Inversa de la matriz clave
 clave_inversa = np.array(Matrix(clave).inv_mod(28))
 
 # Lista de inputs para la matriz
@@ -32,13 +32,14 @@ rows = 1
 colums = 0
 textfields = []
 
-#resultado = ("1  2  3  4  5\n6  7  8  9  10\n11 12 13 14 15\n16 17 18 19 20\n21 22 23 24 25")
+# resultado = ("1  2  3  4  5\n6  7  8  9  10\n11 12 13 14 15\n16 17 18 19 20\n21 22 23 24 25")
 
 # Mapeo de letras con numeros
 tabla = "\nTABLA DE EQUIVALENCIAS: \nA = 0 B = 1 C = 2 D = 3 E = 4 \nF = 5 G = 6 H = 7 I = 8 \nJ = 9 K = 10 L = 11 M = 12 \nN = 13 O = 14 P = 15 Q = 16 \nR = 17 S = 18 T = 19 U = 20 \nV = 21 W = 22 X = 23 Y = 24 \nZ = 25 ' '(espacio) = 26 Ñ = 27"
 
+
 def main(page: ft.Page):
-    
+
     global coos_a, coos_b, rows, colums
     # Configuracion de la pagina
     page.title = "Matrix Calculator"
@@ -53,11 +54,11 @@ def main(page: ft.Page):
             border=ft.InputBorder.NONE,
             max_length=3,
             counter_style=ft.TextStyle(size=0),
-            text_size=12,
+            text_size=13,
             text_align=ft.TextAlign.CENTER,
             hint_text=hint,
             hint_style=ft.TextStyle(
-                size=10,
+                size=8,
                 color=ft.colors.GREY),
             filled=True,
             width=80,
@@ -65,37 +66,37 @@ def main(page: ft.Page):
             bgcolor=ft.colors.WHITE
         )
         return user_input
-    
-    # Input para las Aplicaciones de Hill de Hill 
+
+    # Input para las Aplicaciones de Hill de Hill
     def return_input_ap(hint):
         user_input = ft.TextField(
-            border=ft.InputBorder.NONE, 
+            border=ft.InputBorder.NONE,
             max_length=100,
             capitalization=ft.TextCapitalization.CHARACTERS,
             multiline=True,
             text_align=ft.TextAlign.CENTER,
             hint_text=hint,
             hint_style=ft.TextStyle(
-                 size=16,
-                 color=ft.colors.GREY
+                size=16,
+                color=ft.colors.GREY
             ),
             filled=True,
             bgcolor=ft.colors.ORANGE_50
-        )   
-        return user_input #user_input.value 
-    
+        )
+        return user_input  # user_input.value
+
     # Funcion para almacenar los inputs de hill
     def return_input_encrip(hint):
         user_input = ft.TextField(
-            border=ft.InputBorder.NONE, 
+            border=ft.InputBorder.NONE,
             max_length=100,
             capitalization=ft.TextCapitalization.CHARACTERS,
             multiline=True,
             text_align=ft.TextAlign.CENTER,
             hint_text=hint,
             hint_style=ft.TextStyle(
-                 size=16,
-                 color=ft.colors.GREY
+                size=16,
+                color=ft.colors.GREY
             ),
             filled=True,
             bgcolor=ft.colors.ORANGE_50,
@@ -103,9 +104,9 @@ def main(page: ft.Page):
         )
         return user_input
 
-    #resultado
+    # resultado
     resultado = ft.TextField(
-        border=ft.InputBorder.NONE, 
+        border=ft.InputBorder.NONE,
         max_length=1000,
         capitalization=ft.TextCapitalization.CHARACTERS,
         multiline=True,
@@ -115,12 +116,12 @@ def main(page: ft.Page):
             size=16,
             color=ft.colors.GREY
         ),
-        filled=False, 
+        filled=False,
         bgcolor=ft.colors.ORANGE_50,
-        read_only = True # impide que el simio del usuario escriba
-       
+        read_only=True  # impide que el simio del usuario escriba
+
     )
-   
+
     # Creacion de inputs para la matriz
     # def create_inputs(colums, rows, count=26, limt=5):
 
@@ -133,7 +134,7 @@ def main(page: ft.Page):
     #             colums = 0
 
     #     return coos
-    
+
     # inputs para la matriz a
     def create_inputs_a(colums, rows, count=26, limt=5):
         for i in range(1, count):
@@ -203,14 +204,14 @@ def main(page: ft.Page):
             if len(in_size_op) > 4:
                 limt = int(in_size_op[4])
             else:
-                limt = 0  
+                limt = 0
             in_size_op = ""
         elif in_size_op is None or in_size_op == "":
             count = convert_size(in_size_det) + 1
             if len(in_size_det) > 4:
                 limt = int(in_size_det[4])
             else:
-                limt = 0  
+                limt = 0
             in_size_det = ""
 
         items = []
@@ -230,6 +231,7 @@ def main(page: ft.Page):
 
         return items
     # coordenadas b
+
     def items_b(count):
 
         in_size_op = input_size_matriz.value
@@ -243,14 +245,14 @@ def main(page: ft.Page):
             if len(in_size_op) > 4:
                 limt = int(in_size_op[4])
             else:
-                limt = 0 
+                limt = 0
             in_size_op = ""
         elif in_size_op is None or in_size_op == "":
             count = convert_size(in_size_det) + 1
             if len(in_size_det) > 4:
                 limt = int(in_size_det[4])
             else:
-                limt = 0  
+                limt = 0
             in_size_det = ""
 
         items = []
@@ -272,7 +274,7 @@ def main(page: ft.Page):
 
     # Funcion para la eleccion del tema
     def subject_changed(e):
-       
+
         subject = input_tema.value
         if subject == "Matrices":
             row_botones.controls.clear()
@@ -303,13 +305,15 @@ def main(page: ft.Page):
             matriz_a.content.controls.clear()
             matriz_b.content.controls.clear()
             matriz_a.content.controls.append(return_input_ap("Ingreso letras"))
-            matriz_b.content.controls.append(ft.Text("Matriz clave: \n[3, 3] \n[2, 5]", color=ft.colors.BLACK, weight=ft.FontWeight.BOLD, italic=True, text_align=ft.TextAlign.CENTER))
-            matriz_b.content.controls.append(ft.Text(tabla, color=ft.colors.BLACK, weight=ft.FontWeight.BOLD, italic=True, text_align=ft.TextAlign.CENTER))
+            matriz_b.content.controls.append(ft.Text(
+                "Matriz clave: \n[3, 3] \n[2, 5]", color=ft.colors.BLACK, weight=ft.FontWeight.BOLD, italic=True, text_align=ft.TextAlign.CENTER))
+            matriz_b.content.controls.append(ft.Text(
+                tabla, color=ft.colors.BLACK, weight=ft.FontWeight.BOLD, italic=True, text_align=ft.TextAlign.CENTER))
 
         page.update()
 
     entrada_mensaje = ft.TextField(
-        border=ft.InputBorder.NONE, 
+        border=ft.InputBorder.NONE,
         max_length=100,
         capitalization=ft.TextCapitalization.CHARACTERS,
         multiline=True,
@@ -322,16 +326,7 @@ def main(page: ft.Page):
         filled=True,
         bgcolor=ft.colors.ORANGE_50
     )
-    # global entrada_mensaje
-    # entrada_mensaje = return_input_encrip("")
-    # def encriptar(e):
-    #     global entrada_mensaje
-    #     mensaje = entrada_mensaje.value
-    #     resultado_encriptado = encriptar_mensaje(clave, mensaje)
-    #     resultado.text = resultado_encriptado
-    #     print("Si ejecuta la función")
-    #     page.update()
-    # Funcion para la eleccion del subtema
+
     def sub_subject_changed(e):
         subject = input_tema.value
         sub_subject = ""
@@ -361,7 +356,7 @@ def main(page: ft.Page):
                 matriz_a.content.controls.append(return_matrix_a())
                 matriz_b.content.controls.clear()
                 matriz_b.content.controls.append(return_matrix_b())
-                # Botón 
+                # Botón
                 resolver_botón.content = boton_restar
             elif sub_subject == "Multiplicación por un escalar":
                 row_botones.controls.clear()
@@ -372,8 +367,9 @@ def main(page: ft.Page):
                 operation.update()
                 matriz_a.content.controls.clear()
                 matriz_a.content.controls.append(return_input("Escalar (k)"))
-                # Botón 
-                resolver_botón.content = ft.ElevatedButton("Multiplicar por un escalar", bgcolor=ft.colors.ORANGE, color=ft.colors.BLACK)
+                # Botón
+                resolver_botón.content = ft.ElevatedButton(
+                    "Multiplicar por un escalar", bgcolor=ft.colors.ORANGE, color=ft.colors.BLACK, on_click=escalar)
             elif sub_subject == "Multiplicacion de matrices":
                 row_botones.controls.clear()
                 row_botones.controls.append(main_subject)
@@ -412,7 +408,8 @@ def main(page: ft.Page):
                 operation.content.value = "Det(A)"
                 operation.update()
                 matriz_b.content.controls.clear()
-                resolver_botón.content = ft.ElevatedButton("Determinante por cofactores", bgcolor=ft.colors.ORANGE, color=ft.colors.BLACK)
+                resolver_botón.content = ft.ElevatedButton(
+                    "Determinante por cofactores", bgcolor=ft.colors.ORANGE, color=ft.colors.BLACK, on_click=coefactores)
 
             input_size_matriz.value = None
 
@@ -429,11 +426,13 @@ def main(page: ft.Page):
                 matriz_a.content.controls.append(entrada_mensaje)
                 # print (entrada_mensaje)
                 matriz_b.content.controls.clear()
-                matriz_b.content.controls.append(ft.Text("Matriz clave: \n[3, 3] \n[2, 5]", weight=ft.FontWeight.BOLD, italic=True, text_align=ft.TextAlign.CENTER))
-                matriz_b.content.controls.append(ft.Text(tabla, color=ft.colors.BLACK, weight=ft.FontWeight.BOLD, italic=True, text_align=ft.TextAlign.CENTER))
-                #botón 
+                matriz_b.content.controls.append(ft.Text(
+                    "Matriz clave: \n[3, 3] \n[2, 5]", weight=ft.FontWeight.BOLD, italic=True, text_align=ft.TextAlign.CENTER))
+                matriz_b.content.controls.append(ft.Text(
+                    tabla, color=ft.colors.BLACK, weight=ft.FontWeight.BOLD, italic=True, text_align=ft.TextAlign.CENTER))
+                # botón
                 resolver_botón.content = boton_encriptar
-            elif sub_subject == "Desencriptación de Hill": 
+            elif sub_subject == "Desencriptación de Hill":
                 row_botones.controls.clear()
                 row_botones.controls.append(main_subject)
                 row_botones.controls.append(ops_aplications)
@@ -444,9 +443,11 @@ def main(page: ft.Page):
                 entrada_mensaje.hint_text = "Ingresa el código"
                 matriz_a.content.controls.append(entrada_mensaje)
                 matriz_b.content.controls.clear()
-                matriz_b.content.controls.append(ft.Text("Matriz clave: \n[3, 3] \n[2, 5]", color=ft.colors.BLACK, weight=ft.FontWeight.BOLD, italic=True, text_align=ft.TextAlign.CENTER))
-                matriz_b.content.controls.append(ft.Text(tabla, color=ft.colors.BLACK, weight=ft.FontWeight.BOLD, italic=True, text_align=ft.TextAlign.CENTER))
-                # botón 
+                matriz_b.content.controls.append(ft.Text(
+                    "Matriz clave: \n[3, 3] \n[2, 5]", color=ft.colors.BLACK, weight=ft.FontWeight.BOLD, italic=True, text_align=ft.TextAlign.CENTER))
+                matriz_b.content.controls.append(ft.Text(
+                    tabla, color=ft.colors.BLACK, weight=ft.FontWeight.BOLD, italic=True, text_align=ft.TextAlign.CENTER))
+                # botón
                 # resolver_botón.content = ft.ElevatedButton("Desencriptar", bgcolor=ft.colors.ORANGE, color=ft.colors.BLACK)
                 resolver_botón.content = boton_desencriptar
 
@@ -461,10 +462,12 @@ def main(page: ft.Page):
         # print("Matriz b: ", matriz_b_values)
         resultado_matriz = sumarMatrices(matriz_a_values, matriz_b_values)
         # Convierte el resultado a una cadena de texto y actualiza el contenedor 'resultado'.
-        resultado.value = '\n'.join(' '.join(str(cell) for cell in row) for row in resultado_matriz)
+        resultado.value = '\n'.join(' '.join(str(cell)
+                                    for cell in row) for row in resultado_matriz)
         page.update()
 
-    boton_sumar = ft.ElevatedButton("Sumar", bgcolor=ft.colors.ORANGE, color=ft.colors.BLACK, on_click=sumar)
+    boton_sumar = ft.ElevatedButton(
+        "Sumar", bgcolor=ft.colors.ORANGE, color=ft.colors.BLACK, on_click=sumar)
 
     # Resta
     def restar(e):
@@ -475,9 +478,11 @@ def main(page: ft.Page):
         # print("Matriz b: ", matriz_b_values)
         resultado_matriz = restarMatrices(matriz_a_values, matriz_b_values)
         # Convierte el resultado a una cadena de texto y actualiza el contenedor 'resultado'.
-        resultado.value = '\n'.join(' '.join(str(cell) for cell in row) for row in resultado_matriz)
+        resultado.value = '\n'.join(' '.join(str(cell)
+                                    for cell in row) for row in resultado_matriz)
         page.update()
-    boton_restar = ft.ElevatedButton("Restar", bgcolor=ft.colors.ORANGE, color=ft.colors.BLACK, on_click=restar)
+    boton_restar = ft.ElevatedButton(
+        "Restar", bgcolor=ft.colors.ORANGE, color=ft.colors.BLACK, on_click=restar)
 
     # Multiplicación
     def multiplicar(e):
@@ -486,17 +491,31 @@ def main(page: ft.Page):
         matriz_b_values = get_matrix_values_b()
         # print("Matriz a", matriz_a_values)
         # print("Matriz b: ", matriz_b_values)
-        resultado_matriz = multiplicarMatrices(matriz_a_values, matriz_b_values)
+        resultado_matriz = multiplicarMatrices(
+            matriz_a_values, matriz_b_values)
         # Convierte el resultado a una cadena de texto y actualiza el contenedor 'resultado'.
-        resultado.value = '\n'.join(' '.join(str(cell) for cell in row) for row in resultado_matriz)
+        resultado.value = '\n'.join(' '.join(str(cell)
+                                    for cell in row) for row in resultado_matriz)
         page.update()
-    boton_multiplicar = ft.ElevatedButton("Multiplicar", bgcolor=ft.colors.ORANGE, color=ft.colors.BLACK, on_click=multiplicar)
-
+    boton_multiplicar = ft.ElevatedButton(
+        "Multiplicar", bgcolor=ft.colors.ORANGE, color=ft.colors.BLACK, on_click=multiplicar)
 
     # Escalar
-
+    def escalar(e):
+        matriz_b_values = get_matrix_values_b()
+        escalar = matriz_a.content.controls[0].value
+        result_scalar = multiplicarEscalar(matriz_b_values, int(escalar))
+        resultado.value = '\n'.join(' '.join(str(cell)
+                                    for cell in row) for row in result_scalar)
+        page.update()
 
     # Cofactores
+    def coefactores(e):
+        matriz_b_values = get_matrix_values_a()
+        result_coefactores = cofactores.metodo_coefactores(matriz_b_values)
+
+        print(matriz_b_values)
+        print(result_coefactores)
 
     # Hacer el resultado de las fracciones más estético
     def format_fraction(frac):
@@ -505,17 +524,20 @@ def main(page: ft.Page):
             return str(frac.numerator)
         else:
             return f"{frac.numerator}⁄{frac.denominator}"
-        
+
     # Inversa
     def inversa(e):
         matriz_a_values = get_matrix_values_a()
-        #print ("Matriz a", matriz_a_values)
+        # print ("Matriz a", matriz_a_values)
         resultado_inversa = calcular_inversa(matriz_a_values)
-        resultado_inversa = [[Fraction(cell).limit_denominator() for cell in row] for row in resultado_inversa]
-        resultado.value = '\n'.join('(' + ', '.join(format_fraction(Fraction(cell)) for cell in row) + ')' for row in resultado_inversa)
+        resultado_inversa = [[Fraction(cell).limit_denominator(
+        ) for cell in row] for row in resultado_inversa]
+        resultado.value = '\n'.join('(' + ', '.join(format_fraction(Fraction(cell))
+                                    for cell in row) + ')' for row in resultado_inversa)
         resultado.text_size = 20
         page.update()
-    boton_inversa = ft.ElevatedButton("Inversa", bgcolor=ft.colors.ORANGE, color=ft.colors.BLACK, on_click=inversa)
+    boton_inversa = ft.ElevatedButton(
+        "Inversa", bgcolor=ft.colors.ORANGE, color=ft.colors.BLACK, on_click=inversa)
 
     # Funciones para el cifrado de hill
 
@@ -535,17 +557,19 @@ def main(page: ft.Page):
         resultado.text = resultado.value
         # print(resultado)
         page.update()
-    boton_encriptar = ft.ElevatedButton("Encriptar", bgcolor=ft.colors.ORANGE, color=ft.colors.BLACK, on_click=encriptar)
-    boton_desencriptar = ft.ElevatedButton("Desencriptar", bgcolor=ft.colors.ORANGE, color=ft.colors.BLACK, on_click=desencriptar)
-    
-   
+    boton_encriptar = ft.ElevatedButton(
+        "Encriptar", bgcolor=ft.colors.ORANGE, color=ft.colors.BLACK, on_click=encriptar)
+    boton_desencriptar = ft.ElevatedButton(
+        "Desencriptar", bgcolor=ft.colors.ORANGE, color=ft.colors.BLACK, on_click=desencriptar)
+
     # Funcion para convertir el tamaño de la matriz en un numero
+
     def convert_size(matriz_size):
         size = matriz_size.split("x")
-        if size[0] != '' and size[1] != '': # Verifica que no sea vacío
+        if size[0] != '' and size[1] != '':  # Verifica que no sea vacío
             return int(size[0]) * int(size[1])
         else:
-            return 0  
+            return 0
 
     # Funcion para el cambio de tamaño de la matriz
     def size_changed(e):
@@ -565,7 +589,7 @@ def main(page: ft.Page):
         elif subject == "Determinantes (A)":
             sub_subject_2 = input_subtema_det.value
             size_it = input_size_matriz_2.value
-            itemss = convert_size(size_it)            
+            itemss = convert_size(size_it)
 
         matriz_a.content.controls.clear()
         matriz_b.content.controls.clear()
@@ -580,10 +604,9 @@ def main(page: ft.Page):
         elif sub_subject_2 == "Método de cofactores":
             matriz_a.content.controls.append(return_matrix_a(itemss))
             matriz_b.content.controls.clear()
-        else: 
+        else:
             matriz_a.content.controls.append(return_matrix_a(itemss))
             matriz_b.content.controls.append(return_matrix_b(itemss))
-
 
         page.update()
 
@@ -611,7 +634,7 @@ def main(page: ft.Page):
             return CINCO_X_CINCO
         else:
             return None
-                 
+
     # Boton para la eleccion de tema
     input_tema = ft.Dropdown(
         on_change=subject_changed,
@@ -724,7 +747,6 @@ def main(page: ft.Page):
         autofocus=True
     )
 
-     
     # Contenedor del boton para la seleccion del tema
     main_subject = ft.Container(
         input_tema,
@@ -776,7 +798,7 @@ def main(page: ft.Page):
         bgcolor="#FBC364",
         padding=5,
     )
-    
+
     # Fila de botones (tema, subtema, tamaño de matrices)
     row_botones = ft.Row(
         [main_subject]
@@ -793,13 +815,13 @@ def main(page: ft.Page):
             text_align=ft.TextAlign.CENTER,
             hint_text=hint,
             hint_style=ft.TextStyle(
-                 size=16,
-                 color=ft.colors.BLACK87
+                size=16,
+                color=ft.colors.BLACK87
             ),
             disabled=True,
-        )   
+        )
         return user_input
-    
+
     # Funcion para el acomodo de los inputs en una matriz de 5 x 5
 
     def return_matrix_a(itemss=25):
@@ -825,7 +847,7 @@ def main(page: ft.Page):
         )
 
         return row
-    
+
     def return_matrix_b(itemss=25):
 
         in_op = input_size_matriz.value
@@ -850,7 +872,7 @@ def main(page: ft.Page):
 
         return row
 
-    def get_matrix_values_a():  
+    def get_matrix_values_a():
         # Recupera los valores de los campos de entrada y los almacena en una lista.
         in_size_op = input_size_matriz.value
         in_size_det = input_size_matriz_2.value
@@ -866,14 +888,17 @@ def main(page: ft.Page):
             limt = int(in_size_det[0])
             in_size_det = ""
         coos = create_inputs_a(colums, rows, count=count, limt=limt)
-        matriz_values = [float(coo.value) for coo in coos if coo.value.strip() != '']
-        #Da forma a 'matriz_values' para que tenga la forma de la matriz original.
+        matriz_values = [float(coo.value)
+                         for coo in coos if coo.value.strip() != '']
+        # Da forma a 'matriz_values' para que tenga la forma de la matriz original.
         num_rows = count // limt
         num_columns = limt
         matriz_values = np.reshape(matriz_values, (num_rows, num_columns))
+
+        print(matriz_values)
         return matriz_values
-    
-    def get_matrix_values_b():  
+
+    def get_matrix_values_b():
         # Recupera los valores de los campos de entrada y los almacena en una lista.
         in_size_op = input_size_matriz.value
         in_size_det = input_size_matriz_2.value
@@ -889,13 +914,14 @@ def main(page: ft.Page):
             limt = int(in_size_det[0])
             in_size_det = ""
         coos = create_inputs_b(colums, rows, count=count, limt=limt)
-        matriz_values = [float(coo.value) for coo in coos if coo.value.strip() != '']
-        #Da forma a 'matriz_values' para que tenga la forma de la matriz original.
+        matriz_values = [float(coo.value)
+                         for coo in coos if coo.value.strip() != '']
+        # Da forma a 'matriz_values' para que tenga la forma de la matriz original.
         num_rows = count // limt
         num_columns = limt
         matriz_values = np.reshape(matriz_values, (num_rows, num_columns))
         return matriz_values
-    
+
     # Matriz A
     matriz_a = ft.Container(
         content=return_matrix_a(),
@@ -918,9 +944,9 @@ def main(page: ft.Page):
     )
 
     def on_column_scroll(e: ft.OnScrollEvent):
-        pass 
-    
-    # Contenedor de botón calcular 
+        pass
+
+    # Contenedor de botón calcular
     resolver_botón = ft.Container(
         bgcolor="#FFFFFF",
         padding=10,
@@ -935,16 +961,16 @@ def main(page: ft.Page):
                 operation,
                 matriz_b,  # Matriz B
                 ft.Text(" = "),
-                    ft.Container(
+                ft.Container(
                     content=ft.Column(
-                       [
+                        [
                             resultado,
-                            #color=ft.colors.WHITE
+                            # color=ft.colors.WHITE
                             ft.Text(
                                 "\n" * 50,  # Agrega líneas en blanco al final
                                 color=ft.colors.WHITE
                             )
-                       ], 
+                        ],
                         spacing=10,
                         height=200,
                         width=200,
@@ -955,22 +981,22 @@ def main(page: ft.Page):
                     width=310,
                     height=310,
                     border_radius=ft.border_radius.all(5)
-                )                      
-            ] 
+                )
+            ]
         )
     )
     # Contenedor principal de la aplicacion
     main_conteiner = ft.Container(
         ft.Column([
-        botones, 
-        matrices, 
-        ft.Row([
-            ft.Text("A", color=ft.colors.ORANGE, size=20), 
-            ft.Text("B", color=ft.colors.ORANGE, size=20),
-            ft.Text("Result", color=ft.colors.ORANGE, size=20)
-        ], alignment=ft.MainAxisAlignment.SPACE_AROUND),
-        ft.Row([resolver_botón],  alignment=ft.MainAxisAlignment.CENTER)
-    ]))
+            botones,
+            matrices,
+            ft.Row([
+                ft.Text("A", color=ft.colors.ORANGE, size=20),
+                ft.Text("B", color=ft.colors.ORANGE, size=20),
+                ft.Text("Result", color=ft.colors.ORANGE, size=20)
+            ], alignment=ft.MainAxisAlignment.SPACE_AROUND),
+            ft.Row([resolver_botón],  alignment=ft.MainAxisAlignment.CENTER)
+        ]))
 
     page.add(main_conteiner)
 
