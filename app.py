@@ -204,11 +204,17 @@ def main(page: ft.Page):
             limt = 5
         elif in_size_det is None or in_size_det == "":
             count = convert_size(in_size_op) + 1
-            limt = int(in_size_op[4])
+            if len(in_size_op) > 4:
+                limt = int(in_size_op[4])
+            else:
+                limt = 0  # O cualquier otro valor por defecto
             in_size_op = ""
         elif in_size_op is None or in_size_op == "":
             count = convert_size(in_size_det) + 1
-            limt = int(in_size_det[4])
+            if len(in_size_det) > 4:
+                limt = int(in_size_det[4])
+            else:
+                limt = 0  
             in_size_det = ""
 
         items = []
@@ -238,11 +244,17 @@ def main(page: ft.Page):
             limt = 5
         elif in_size_det is None or in_size_det == "":
             count = convert_size(in_size_op) + 1
-            limt = int(in_size_op[4])
+            if len(in_size_op) > 4:
+                limt = int(in_size_op[4])
+            else:
+                limt = 0  # O cualquier otro valor por defecto
             in_size_op = ""
         elif in_size_op is None or in_size_op == "":
             count = convert_size(in_size_det) + 1
-            limt = int(in_size_det[4])
+            if len(in_size_det) > 4:
+                limt = int(in_size_det[4])
+            else:
+                limt = 0  # O cualquier otro valor por defecto
             in_size_det = ""
 
         items = []
@@ -501,7 +513,7 @@ def main(page: ft.Page):
     # Inversa
     def inversa(e):
         matriz_a_values = get_matrix_values_a()
-        print ("Matriz a", matriz_a_values)
+        #print ("Matriz a", matriz_a_values)
         resultado_inversa = calcular_inversa(matriz_a_values)
         resultado_inversa = [[Fraction(cell).limit_denominator() for cell in row] for row in resultado_inversa]
         resultado.value = '\n'.join('(' + ', '.join(format_fraction(Fraction(cell)) for cell in row) + ')' for row in resultado_inversa)
@@ -534,7 +546,10 @@ def main(page: ft.Page):
     # Funcion para convertir el tamaño de la matriz en un numero
     def convert_size(matriz_size):
         size = matriz_size.split("x")
-        return int(size[0]) * int(size[1])
+        if size[0] != '' and size[1] != '': # Verifica que no sea vacío
+            return int(size[0]) * int(size[1])
+        else:
+            return 0  
 
     # Funcion para el cambio de tamaño de la matriz
     def size_changed(e):
