@@ -84,9 +84,6 @@ def main(page: ft.Page):
         )   
         return user_input #user_input.value 
     
-
-
-
     # Funcion para almacenar los inputs de hill
     def return_input_encrip(hint):
         user_input = ft.TextField(
@@ -123,7 +120,6 @@ def main(page: ft.Page):
         read_only = True # impide que el simio del usuario escriba
        
     )
-
    
     # Creacion de inputs para la matriz
     # def create_inputs(colums, rows, count=26, limt=5):
@@ -207,7 +203,7 @@ def main(page: ft.Page):
             if len(in_size_op) > 4:
                 limt = int(in_size_op[4])
             else:
-                limt = 0  # O cualquier otro valor por defecto
+                limt = 0  
             in_size_op = ""
         elif in_size_op is None or in_size_op == "":
             count = convert_size(in_size_det) + 1
@@ -247,14 +243,14 @@ def main(page: ft.Page):
             if len(in_size_op) > 4:
                 limt = int(in_size_op[4])
             else:
-                limt = 0  # O cualquier otro valor por defecto
+                limt = 0 
             in_size_op = ""
         elif in_size_op is None or in_size_op == "":
             count = convert_size(in_size_det) + 1
             if len(in_size_det) > 4:
                 limt = int(in_size_det[4])
             else:
-                limt = 0  # O cualquier otro valor por defecto
+                limt = 0  
             in_size_det = ""
 
         items = []
@@ -899,10 +895,7 @@ def main(page: ft.Page):
         num_columns = limt
         matriz_values = np.reshape(matriz_values, (num_rows, num_columns))
         return matriz_values
-
-
-
-
+    
     # Matriz A
     matriz_a = ft.Container(
         content=return_matrix_a(),
@@ -966,12 +959,6 @@ def main(page: ft.Page):
             ] 
         )
     )
-    
-    #Función para almacenar y devolver los outputs del usuario
-#    def outputsUser():
-#         global resultado
-#         resultado.text = desencriptar_mensaje(clave, clave_inversa, entrada_mensaje.value)
-#         page.update()
     # Contenedor principal de la aplicacion
     main_conteiner = ft.Container(
         ft.Column([
