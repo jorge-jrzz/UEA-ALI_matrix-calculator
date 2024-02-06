@@ -1,5 +1,7 @@
 # Matrix Calculator
 
+<p align="center"> <img src="images/header.png"/> </p>
+
 Una calculadora de Álgebra Lineal, con operaciones básicas con matrices de 5x5, cálculo de determinantes y Cifrado Hill, son las operaciones que puede realizar esta calculadora.
 
 # índice
@@ -48,7 +50,7 @@ Entra al directorio del proyecto
 Instala las dependencias necesarias
 
 ```bash
-  python -m venv venv
+  python3 -m venv venv
   source venv/bin/activate
   pip install -r requirements.txt
 ```
