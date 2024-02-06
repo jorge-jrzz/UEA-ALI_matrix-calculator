@@ -1,10 +1,9 @@
 # Autores: Jorge Juarez, Iván Garrido Velázquez, Casandra Zetina Rodríguez
 import flet as ft
-from determinantes_cifrado import cofactores, cifradohill
-from funcionalidades_terminal.operaciones_matrices import *
 import numpy as np
 from sympy import Matrix
 from fractions import Fraction  # Para que los resultados salgan en fracciones
+from src import cofactores, cifradohill, operaciones_matrices
 
 # Tamaño para las matrices
 DOS_X_DOS = 160
@@ -460,7 +459,8 @@ def main(page: ft.Page):
         matriz_b_values = get_matrix_values_b()
         # print("Matriz a", matriz_a_values)
         # print("Matriz b: ", matriz_b_values)
-        resultado_matriz = sumarMatrices(matriz_a_values, matriz_b_values)
+        resultado_matriz = operaciones_matrices.sumarMatrices(
+            matriz_a_values, matriz_b_values)
         # Convierte el resultado a una cadena de texto y actualiza el contenedor 'resultado'.
         resultado.value = '\n'.join(' '.join(str(cell)
                                     for cell in row) for row in resultado_matriz)
@@ -476,7 +476,8 @@ def main(page: ft.Page):
         matriz_b_values = get_matrix_values_b()
         # print("Matriz a", matriz_a_values)
         # print("Matriz b: ", matriz_b_values)
-        resultado_matriz = restarMatrices(matriz_a_values, matriz_b_values)
+        resultado_matriz = operaciones_matrices.restarMatrices(
+            matriz_a_values, matriz_b_values)
         # Convierte el resultado a una cadena de texto y actualiza el contenedor 'resultado'.
         resultado.value = '\n'.join(' '.join(str(cell)
                                     for cell in row) for row in resultado_matriz)
@@ -491,7 +492,7 @@ def main(page: ft.Page):
         matriz_b_values = get_matrix_values_b()
         # print("Matriz a", matriz_a_values)
         # print("Matriz b: ", matriz_b_values)
-        resultado_matriz = multiplicarMatrices(
+        resultado_matriz = operaciones_matrices.multiplicarMatrices(
             matriz_a_values, matriz_b_values)
         # Convierte el resultado a una cadena de texto y actualiza el contenedor 'resultado'.
         resultado.value = '\n'.join(' '.join(str(cell)
@@ -504,7 +505,8 @@ def main(page: ft.Page):
     def escalar(e):
         matriz_b_values = get_matrix_values_b()
         escalar = matriz_a.content.controls[0].value
-        result_scalar = multiplicarEscalar(matriz_b_values, int(escalar))
+        result_scalar = operaciones_matrices.multiplicarEscalar(
+            matriz_b_values, int(escalar))
         resultado.value = '\n'.join(' '.join(str(cell)
                                     for cell in row) for row in result_scalar)
         page.update()
@@ -528,7 +530,8 @@ def main(page: ft.Page):
     def inversa(e):
         matriz_a_values = get_matrix_values_a()
         # print ("Matriz a", matriz_a_values)
-        resultado_inversa = calcular_inversa(matriz_a_values)
+        resultado_inversa = operaciones_matrices.calcular_inversa(
+            matriz_a_values)
         resultado_inversa = [[Fraction(cell).limit_denominator(
         ) for cell in row] for row in resultado_inversa]
         resultado.value = '\n'.join('(' + ', '.join(format_fraction(Fraction(cell))
@@ -543,7 +546,7 @@ def main(page: ft.Page):
     def encriptar(e):
         mensaje = entrada_mensaje.value
         # print (mensaje)
-        resultado.value = encriptar_mensaje(clave, mensaje)
+        resultado.value = cifradohill.encriptar_mensaje(clave, mensaje)
         # print("Si ejecuta la función")
         resultado.text = resultado.value
         # print(resultado)
@@ -551,7 +554,8 @@ def main(page: ft.Page):
 
     def desencriptar(e):
         codigo = entrada_mensaje.value
-        resultado.value = desencriptar_mensaje(clave, clave_inversa, codigo)
+        resultado.value = cifradohill.desencriptar_mensaje(
+            clave, clave_inversa, codigo)
         # print("Si ejecuta la función DESENCRIPTAR")
         resultado.text = resultado.value
         # print(resultado)
