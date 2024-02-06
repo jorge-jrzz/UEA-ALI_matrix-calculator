@@ -1,5 +1,7 @@
 # Matrix Calculator
 
+<p align="center"> <img src="images/header.png"/> </p>
+
 A Linear Algebra calculator, basic operations with 5x5 matrices, calculation of determinants and Hill Cipher, are the operations that this calculator can perform.
 If you want read this README in spanish, go [here](/README.es.md)
 
@@ -49,7 +51,7 @@ Go to the project directory
 Install dependencies
 
 ```bash
-  python -m venv venv
+  python3 -m venv venv
   source venv/bin/activate
   pip install -r requirements.txt
 ```
