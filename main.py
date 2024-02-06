@@ -513,9 +513,8 @@ def main(page: ft.Page):
     def coefactores(e):
         matriz_b_values = get_matrix_values_a()
         result_coefactores = cofactores.metodo_coefactores(matriz_b_values)
-
-        print(matriz_b_values)
-        print(result_coefactores)
+        resultado.value = result_coefactores
+        page.update()
 
     # Hacer el resultado de las fracciones más estético
     def format_fraction(frac):

@@ -10,8 +10,7 @@ respuesta_final = ""
 def cofactor(matriz, fila, columna):
     global respuesta_final
     submatriz = np.delete(np.delete(matriz, fila, axis=0), columna, axis=1)
-    print(
-        f"\nCalculando el cofactor para el elemento de la fila {fila + 1}, columna {columna + 1}:\n{submatriz}")
+    # print(f"\nCalculando el cofactor para el elemento de la fila {fila + 1}, columna {columna + 1}:\n{submatriz}")
     respuesta_final += f"\nCalculando el cofactor para el elemento de la fila {fila + 1}, comna {columna + 1}:\n{submatriz}"
 
     # Obtener los elementos de la submatriz para la explicación
@@ -19,12 +18,12 @@ def cofactor(matriz, fila, columna):
 
     # Mostrar la operación específica para calcular el cofactor
     operacion = f"{elementos_submatriz[0]} * {elementos_submatriz[3]} - {elementos_submatriz[1]} * {elementos_submatriz[2]}"
-    print(f"Operación para el cofactor: {operacion}")
-    respuesta_final += f"Operación para el cofactor: {operacion}"
+    # print(f"Operación para el cofactor: {operacion}")
+    respuesta_final += f"\nOperación para el cofactor: {operacion}"
 
     cof = ((-1) ** (fila + columna)) * determinante(submatriz)
-    print(f"Resultado del cofactor: {cof}")
-    respuesta_final += f"Resultado del cofactor: {cof}"
+    # print(f"Resultado del cofactor: {cof}")
+    respuesta_final += f"\nResultado del cofactor: {cof}"
     return cof
 
 
@@ -42,10 +41,9 @@ def determinante(matriz):
         for columna in range(size):
             cof = cofactor(matriz, 0, columna)
             respuesta_final += f"\nMultiplicando el elemento en la fila 1, columna {columna + 1} por su cofactor:"
-            print(
-                f"\nMultiplicando el elemento en la fila 1, columna {columna + 1} por su cofactor:")
-            respuesta_final += f"{matriz[0, columna]} * {cof} = {matriz[0, columna] * cof}"
-            print(f"{matriz[0, columna]} * {cof} = {matriz[0, columna] * cof}")
+            # print(f"\nMultiplicando el elemento en la fila 1, columna {columna + 1} por su cofactor:")
+            respuesta_final += f"\n{matriz[0, columna]} * {cof} = {matriz[0, columna] * cof}"
+            # print(f"{matriz[0, columna]} * {cof} = {matriz[0, columna] * cof}")
             if columna == 0:
                 expresion_cofactores += f"{matriz[0, columna]} * {cof} "
             else:
@@ -53,19 +51,20 @@ def determinante(matriz):
             det += matriz[0, columna] * cof
 
         # expresion_cofactores = expresion_cofactores[:-2]  # Eliminar el último "+ "
-        respuesta_final += "\nExpresión de la suma de los cofactores: {expresion_cofactores}"
-        print(
-            f"\nExpresión de la suma de los cofactores: {expresion_cofactores}")
-        respuesta_final += f"Suma: {det}"
-        print(f"Suma: {det}")
+        respuesta_final += f"\nExpresión de la suma de los cofactores: {expresion_cofactores}"
+        # print(f"\nExpresión de la suma de los cofactores: {expresion_cofactores}")
+        respuesta_final += f"\nSuma: {det}"
+        # print(f"Suma: {det}")
         return det
 
 
 def metodo_coefactores(matriz):
     global respuesta_final
-    determinante(matriz)
-    print(respuesta_final)
-    return respuesta_final
+    determinante_result = determinante(matriz)
+    if len(respuesta_final) == 0:
+        return f"Determinante por cofactores: {determinante_result}"
+    else:
+        return respuesta_final
 
 
 def insertar_matriz():
@@ -98,7 +97,4 @@ if __name__ == "__main__":
     matriz_usuario = insertar_matriz()
 
     if matriz_usuario is not None:
-        # print("\nCalculando el determinante usando el método de cofactores (laplace)...")
-        resultado = determinante(matriz_usuario)
-        # print(f"\nDeterminante por cofactores: {resultado}")
-        print(len(respuesta_final))
+        print(metodo_coefactores(matriz_usuario))
