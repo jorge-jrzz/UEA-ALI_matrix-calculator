@@ -11,6 +11,18 @@ from fractions import Fraction
 #         mensaje += "\n"+"\t"
 #     print(mensaje)
 
+
+def matriz_vacia(matriz) -> list:
+    matriz_vacia = list()
+
+    for row in range(len(matriz)):
+        matriz_vacia.append(list())
+        for ccolumn in matriz[0]:
+            matriz_vacia[row].append(0)
+
+    return matriz_vacia
+
+
 def calcular_inversa(matriz):
     m = sp.Matrix(matriz)
     if m.det() != 0:
@@ -18,14 +30,25 @@ def calcular_inversa(matriz):
     else:
         return "** La matriz es singular **"
 
-def sumarMatrices(matriz1, matriz2):
-    return np.array(matriz1) + np.array(matriz2)
+
+def sumarMatrices(matriz_a, matriz_b):
+    # return np.array(matriz1) + np.array(matriz2)
+    matriz_suma = matriz_vacia(matriz_a)
+    for row in range(len(matriz_a)):
+        for column in range(len(matriz_a[row])):
+            resultado = matriz_a[row][column] + matriz_b[row][column]
+            matriz_suma[row][column] = resultado
+
+    return np.array(matriz_suma)
+
 
 def restarMatrices(matriz1, matriz2):
     return np.array(matriz1) - np.array(matriz2)
 
+
 def multiplicarEscalar(matriz, escalar):
     return np.dot(matriz, escalar)
+
 
 def multiplicarMatrices(matriz1, matriz2):
     return np.dot(matriz1, matriz2)
@@ -43,4 +66,3 @@ def multiplicarMatrices(matriz1, matriz2):
 #     imprimir_matriz("Inversa de la Matriz 1:", inversa)
 # except Exception as e:
 #     print(inversa)
-
