@@ -33,24 +33,30 @@ def calcular_inversa(matriz):
 
 def sumarMatrices(matriz_a, matriz_b):
     # return np.array(matriz1) + np.array(matriz2)
-    matriz_suma = matriz_vacia(matriz_a)
-    for row in range(len(matriz_a)):
-        for column in range(len(matriz_a[row])):
-            resultado = matriz_a[row][column] + matriz_b[row][column]
-            matriz_suma[row][column] = resultado
+    if len(matriz_a) != len(matriz_b) or len(matriz_a[0]) != len(matriz_b[0]):
+        return "Las matrices no tienen las mismas dimensiones"
+    else:
+        matriz_suma = matriz_vacia(matriz_a)
+        for row in range(len(matriz_a)):
+            for column in range(len(matriz_a[row])):
+                resultado = matriz_a[row][column] + matriz_b[row][column]
+                matriz_suma[row][column] = resultado
 
-    return np.array(matriz_suma)
+        return np.array(matriz_suma)
 
 
 def restarMatrices(matriz_a, matriz_b):
     # return np.array(matriz1) - np.array(matriz2)
-    matriz_resta = matriz_vacia(matriz_a)
-    for row in range(len(matriz_a)):
-        for column in range(len(matriz_a[row])):
-            resultado = matriz_a[row][column] - matriz_b[row][column]
-            matriz_resta[row][column] = resultado
+    if len(matriz_a) != len(matriz_b) or len(matriz_a[0]) != len(matriz_b[0]):
+        return "Las matrices no tienen las mismas dimensiones"
+    else:
+        matriz_resta = matriz_vacia(matriz_a)
+        for row in range(len(matriz_a)):
+            for column in range(len(matriz_a[row])):
+                resultado = matriz_a[row][column] - matriz_b[row][column]
+                matriz_resta[row][column] = resultado
 
-    return np.array(matriz_resta)
+        return np.array(matriz_resta)
 
 
 def multiplicarEscalar(matriz, escalar):
