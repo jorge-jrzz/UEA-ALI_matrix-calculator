@@ -1,9 +1,9 @@
 # Matrix Calculator
 
-<p align="center"> <img src="images/header.png"/> </p>
+<p align="center"> <img src="Extra/images/header.png"/> </p>
 
 A Linear Algebra calculator, basic operations with 5x5 matrices, calculation of determinants and Hill Cipher, are the operations that this calculator can perform.
-If you want read this README in spanish, go [here](/README.es.md)
+If you want read this README in spanish, go [here.](/README.es.md)
 
 # Indice
 

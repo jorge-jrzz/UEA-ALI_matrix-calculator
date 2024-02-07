@@ -1,12 +1,12 @@
 # Matrix Calculator
 
-<p align="center"> <img src="images/header.png"/> </p>
+<p align="center"> <img src="Extra/images/header.png"/> </p>
 
 Una calculadora de Álgebra Lineal, con operaciones básicas con matrices de 5x5, cálculo de determinantes y Cifrado Hill, son las operaciones que puede realizar esta calculadora.
 
 # índice
 
-- [Características](#características))
+- [Características](#características)
 - [Demostración](#demostración)
 - [Instalación](#instalación)
 - [Ejecutar localmente](#ejecutar-localmente)

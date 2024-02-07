@@ -17,7 +17,7 @@ def matriz_vacia(matriz) -> list:
 
     for row in range(len(matriz)):
         matriz_vacia.append(list())
-        for ccolumn in matriz[0]:
+        for column in matriz[0]:
             matriz_vacia[row].append(0)
 
     return matriz_vacia
@@ -59,23 +59,16 @@ def restarMatrices(matriz_a, matriz_b):
         return np.array(matriz_resta)
 
 
-def multiplicarEscalar(matriz, escalar):
-    return np.dot(matriz, escalar)
+def multiplicarEscalar(matriz, escalar) -> list:
+    # return np.dot(matriz, escalar)
+    matriz_escalar = matriz_vacia(matriz)
+    for row, _ in enumerate(matriz):
+        for column, _ in enumerate(matriz[row]):
+            resultado = matriz[row][column] * escalar
+            matriz_escalar[row][column] = resultado
+
+    return np.array(matriz_escalar)
 
 
 def multiplicarMatrices(matriz1, matriz2):
     return np.dot(matriz1, matriz2)
-
-# Imprimir los resultados
-# print("Resultados")
-# imprimir_matriz("Matriz 1:", matriz1)
-# imprimir_matriz("Matriz 2:", matriz2)
-# imprimir_matriz("Suma 1 + 2:", suma)
-# imprimir_matriz("Resta 1 - 2: ", resta)
-# imprimir_matriz("Multiplicación por un escalar matriz 1 x (2):", multi_es)
-# imprimir_matriz("Multiplicación 1 x 2:", multi)
-
-# try:
-#     imprimir_matriz("Inversa de la Matriz 1:", inversa)
-# except Exception as e:
-#     print(inversa)
