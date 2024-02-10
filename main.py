@@ -413,7 +413,6 @@ def main(page: ft.Page):
         matriz_b_values = get_matrix_values_b()
         # print("Matriz a", matriz_a_values)
         # print("Matriz b: ", matriz_b_values)
-        resultado_matriz = sumar
         resultado_matriz = sumarMatrices(matriz_a_values, matriz_b_values)
         # Convierte el resultado a una cadena de texto y actualiza el contenedor 'resultado'.
         resultado_matriz = [[Fraction(cell).limit_denominator(
@@ -856,9 +855,13 @@ def main(page: ft.Page):
         matriz_values = [float(coo.value)
                          for coo in coos if coo.value.strip() != '']
         # Da forma a 'matriz_values' para que tenga la forma de la matriz original.
-        num_rows = count // limt
-        num_columns = limt
+        # num_rows = count // limt
+        # num_columns = limt
+        # matriz_values = np.reshape(matriz_values, (num_rows, num_columns))
+        num_rows = limt
+        num_columns = count // limt
         matriz_values = np.reshape(matriz_values, (num_rows, num_columns))
+
 
         # print(matriz_values)
         return matriz_values
@@ -882,9 +885,13 @@ def main(page: ft.Page):
         matriz_values = [float(coo.value)
                          for coo in coos if coo.value.strip() != '']
         # Da forma a 'matriz_values' para que tenga la forma de la matriz original.
-        num_rows = count // limt
-        num_columns = limt
+        # num_rows = count // limt
+        # num_columns = limt
+        # matriz_values = np.reshape(matriz_values, (num_rows, num_columns))
+        num_rows = limt
+        num_columns = count // limt
         matriz_values = np.reshape(matriz_values, (num_rows, num_columns))
+
         return matriz_values
 
     # Matriz A
