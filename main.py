@@ -1,10 +1,11 @@
 # Autores: Jorge Juarez, Iván Garrido Velázquez, Casandra Zetina Rodríguez
 import flet as ft
 import numpy as np
-from sympy import Matrix
+from sympy import Matrix, latex
 from fractions import Fraction  # Para que los resultados salgan en fracciones
 from src import cofactores, cifradohill
 from src.operaciones_matrices import *
+
 
 # Tamaño para las matrices
 DOS_X_DOS = 160
@@ -405,8 +406,10 @@ def main(page: ft.Page):
                 resolver_botón.content = boton_desencriptar
 
         page.update()
+        
+    def format_row(row):
+        return '[' + ''.join('{:7}'.format(format_fraction(Fraction(cell))) for cell in row) + ']'
 
-    # Suma
     def sumar(e):
         # Recoge las matrices del usuario.
         matriz_a_values = get_matrix_values_a()
@@ -415,49 +418,36 @@ def main(page: ft.Page):
         # print("Matriz b: ", matriz_b_values)
         resultado_matriz = sumarMatrices(matriz_a_values, matriz_b_values)
         # Convierte el resultado a una cadena de texto y actualiza el contenedor 'resultado'.
-        resultado_matriz = [[Fraction(cell).limit_denominator(
-        ) for cell in row] for row in resultado_matriz]
-        resultado.value = '\n'.join('(' + ', '.join(format_fraction(Fraction(cell))
-                                    for cell in row) + ')' for row in resultado_matriz)
+        resultado_matriz = [[Fraction(cell).limit_denominator() for cell in row] for row in resultado_matriz]
+        resultado.value = '\n'.join(format_row(row) for row in resultado_matriz)
         resultado.text_size = 20  
         page.update()
 
-    boton_sumar = ft.ElevatedButton(
-        "Sumar", bgcolor=ft.colors.ORANGE, color=ft.colors.BLACK, on_click=sumar)
+    boton_sumar = ft.ElevatedButton("Sumar", bgcolor=ft.colors.ORANGE, color=ft.colors.BLACK, on_click=sumar)
 
-    # Resta
+        # Resta
     def restar(e):
-
         matriz_a_values = get_matrix_values_a()
         matriz_b_values = get_matrix_values_b()
-        # print("Matriz a", matriz_a_values)
-        # print("Matriz b: ", matriz_b_values)
         resultado_matriz = restarMatrices(matriz_a_values, matriz_b_values)
-        # Convierte el resultado a una cadena de texto y actualiza el contenedor 'resultado'.
-        resultado_matriz = [[Fraction(cell).limit_denominator(
-        ) for cell in row] for row in resultado_matriz]
-        resultado.value = '\n'.join('(' + ', '.join(format_fraction(Fraction(cell))
-                                    for cell in row) + ')' for row in resultado_matriz)
+        resultado_matriz = [[Fraction(cell).limit_denominator() for cell in row] for row in resultado_matriz]
+        resultado.value = '\n'.join(format_row(row) for row in resultado_matriz)
         resultado.text_size = 20  
         page.update()
+
     boton_restar = ft.ElevatedButton(
         "Restar", bgcolor=ft.colors.ORANGE, color=ft.colors.BLACK, on_click=restar)
 
     # Multiplicación
     def multiplicar(e):
-
         matriz_a_values = get_matrix_values_a()
         matriz_b_values = get_matrix_values_b()
-        # print("Matriz a", matriz_a_values)
-        # print("Matriz b: ", matriz_b_values)
         resultado_matriz = multiplicarMatrices(matriz_a_values, matriz_b_values)
-        # Convierte el resultado a una cadena de texto y actualiza el contenedor 'resultado'.
-        resultado_matriz = [[Fraction(cell).limit_denominator(
-        ) for cell in row] for row in resultado_matriz]
-        resultado.value = '\n'.join('(' + ', '.join(format_fraction(Fraction(cell))
-                                    for cell in row) + ')' for row in resultado_matriz)
+        resultado_matriz = [[Fraction(cell).limit_denominator() for cell in row] for row in resultado_matriz]
+        resultado.value = '\n'.join(format_row(row) for row in resultado_matriz)
         resultado.text_size = 20  
         page.update()
+
     boton_multiplicar = ft.ElevatedButton(
         "Multiplicar", bgcolor=ft.colors.ORANGE, color=ft.colors.BLACK, on_click=multiplicar)
 
@@ -466,10 +456,8 @@ def main(page: ft.Page):
         matriz_b_values = get_matrix_values_b()
         escalar = matriz_a.content.controls[0].value
         result_scalar = multiplicarEscalar(matriz_b_values, int(escalar))
-        result_scalar = [[Fraction(cell).limit_denominator(
-        ) for cell in row] for row in result_scalar]
-        resultado.value = '\n'.join('(' + ', '.join(format_fraction(Fraction(cell))
-                                    for cell in row) + ')' for row in result_scalar)
+        result_scalar = [[Fraction(cell).limit_denominator() for cell in row] for row in result_scalar]
+        resultado.value = '\n'.join(format_row(row) for row in result_scalar)
         resultado.text_size = 20  
         page.update()
 
@@ -489,18 +477,17 @@ def main(page: ft.Page):
         else:
             return f"{frac.numerator}⁄{frac.denominator}"
 
-    # Inversa
     def inversa(e):
         matriz_a_values = get_matrix_values_a()
-        #print ("Matriz a", matriz_a_values)
         resultado_inversa = calcular_inversa(matriz_a_values)
         if any('*' in row for row in resultado_inversa):
             resultado.value = "La matriz no es invertible."
         else:
             resultado_inversa = [[Fraction(cell).limit_denominator() for cell in row] for row in resultado_inversa]
-            resultado.value = '\n'.join('(' + ', '.join(format_fraction(Fraction(cell)) for cell in row) + ')' for row in resultado_inversa)
+            resultado.value = '\n'.join(format_row(row) for row in resultado_inversa)
         resultado.text_size = 20
         page.update()
+
     boton_inversa = ft.ElevatedButton("Inversa", bgcolor=ft.colors.ORANGE, color=ft.colors.BLACK, on_click=inversa)
     # Funciones para el cifrado de hill
 
